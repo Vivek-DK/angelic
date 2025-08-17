@@ -1,0 +1,83 @@
+.outfit-card {
+  background: var(--card-bg);
+  color: var(--card-text);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.88rem;
+}
+
+.outfit-card:hover {
+  transform: translateY(-3px);
+}
+
+.image-wrapper {
+  width: 100%;
+  padding-top: 100%; 
+  position: relative;
+  overflow: hidden;
+  background-color: var(--input-bg);
+}
+
+.image-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.outfit-details {
+  padding: 0.75rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex-grow: 1;
+}
+
+.outfit-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+  line-height: 1.2;
+}
+
+.ratings,
+.outfit-price,
+.original-price {
+  font-size: 0.82rem;
+  line-height: 1.3;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.outfit-price {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.original-price {
+  text-decoration: line-through;
+}
+
+.outfit-link {
+  margin-top: 0.6rem;
+  padding: 0.4rem 0.6rem;
+  text-align: center;
+  font-size: 0.85rem;
+  background-color: rgb(243, 217, 69);
+  color: var(--btn-text);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.outfit-link:hover {
+  background-color: gold;
+  opacity: 0.9;
+}

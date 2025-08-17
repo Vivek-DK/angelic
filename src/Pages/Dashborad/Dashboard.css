@@ -1,0 +1,185 @@
+.dashboard-container {
+  padding: 2rem;
+  background: #f7f8fc;
+  min-height: 100vh;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.dashboard-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dashboard-img {
+  border-radius: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.dashboard-meta p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.dashboard-meta svg {
+  margin-right: 6px;
+  color: #2e86de;
+}
+
+.dashboard-colors {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.dashboard-colors p{
+  text-align: center;
+}
+
+.color-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.color-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70px;
+}
+
+.color-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+}
+
+.color-name {
+  font-size: 0.75rem;
+  margin-top: 4px;
+  text-align: center;
+  color: #333;
+}
+
+.dashboard-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.dashboard-actions button {
+  background-color: #2e86de;
+  color: white;
+  border: none;
+  border-radius: 0.6rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.3s;
+}
+
+.dashboard-actions button:hover {
+  background-color: #1b4f72;
+}
+
+.delete-btn {
+  background-color: #e74c3c !important;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b !important;
+}
+
+.dashboard-loading, .dashboard-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.spinner {
+  margin-right: 10px;
+  animation: spin 1s linear infinite;
+}
+
+.blur-popup {
+  backdrop-filter: blur(6px);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+body {
+  background-color: #f7f8fc;
+  color: #333;
+}
+
+body.dark {
+  background-color: #121212;
+  color: #f1f1f1;
+}
+
+body.dark .dashboard-container {
+  background-color: #121212;
+}
+
+body.dark .dashboard-card {
+  background-color: #1e1e1e;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+body.dark .dashboard-meta p,
+body.dark .dashboard-title,
+body.dark .color-name,
+body.dark .dashboard-empty,
+body.dark .dashboard-loading {
+  color: #f1f1f1;
+}
+
+body.dark .dashboard-actions button {
+  background-color: #3498db;
+}
+
+body.dark .dashboard-actions .delete-btn {
+  background-color: #e74c3c;
+}
+
+body.dark .color-circle {
+  border-color: #555;
+}
+
+
+@media (max-width:1000px) {
+  .dashboard-container{
+    margin-bottom: 3.5rem;
+  }
+}

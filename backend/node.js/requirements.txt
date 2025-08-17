@@ -1,0 +1,13 @@
+mongoose
+mongodb
+nodemailer
+express
+bcrypt
+bcryptjs
+jsonwebtoken
+multer
+multer-storage-cloudinary
+cloudinary
+axios
+cors
+dotenv

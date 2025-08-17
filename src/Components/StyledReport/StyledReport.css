@@ -1,0 +1,148 @@
+.report-page {
+  padding: 20px;
+  background: var(--report-bg);
+  font-family: "Playfair Display", serif;
+  min-height: 100vh;
+}
+
+.back-btn {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--nav-text);
+}
+
+.report-container {
+  background: var(--report-container);
+  max-width: 800px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 12px;
+}
+
+.report-header {
+  text-align: center;
+  border-bottom: 2px solid var(--report-border);
+  padding-bottom: 20px;
+}
+
+.brand-logo {
+  height: 80px;
+}
+
+.report-title {
+  font-size: 26px;
+  letter-spacing: 1px;
+}
+
+.report-image-section {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0 30px 0;
+  
+}
+
+.user-photo {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid #e5e5e5;
+}
+
+.section{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.report-section {
+  margin-bottom: 25px;  
+}
+
+.section h2, .report-section h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  border-left: 4px solid var(--report-h2-border);
+  padding-left: 10px;
+}
+
+.skin-tone-name {
+  margin-top: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 15px;
+}
+
+.color-card {
+  text-align: center;
+}
+
+.color-swatch {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: auto;
+  border: 1px solid var(--footer-text);
+}
+
+.color-card span {
+  display: block;
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+.report-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+  color: #7c7b7bff;
+}
+
+.report-footer p{
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+}
+
+.download-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background: #c19a6b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.download-btn:hover {
+  background: #b0895b;
+}
+
+@media (max-width:1000px) {
+  .report-page{
+    margin-bottom: 100px;
+  }
+
+  .section h2, .report-section h2{
+    font-size: 1rem;
+  }
+}
+
+@media (min-width:1024px) {
+  .skin-tone-name {
+    margin-top: 25px;
+  }
+}

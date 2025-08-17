@@ -1,0 +1,133 @@
+.contact-section {
+  padding: 3rem 1rem;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
+}
+
+.contact-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.contact-left img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  object-fit: contain;
+  display: block;
+}
+
+.contact-right {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.contact-right h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  color: var(--heading-color);
+  text-align: center;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 1rem;
+  margin-bottom: 1.2rem;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  color: #333;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.08);
+}
+
+.contact-form button {
+  background: linear-gradient(to right, #6a5acd, #0077ff);
+  color: white;
+  padding: 0.85rem 1.6rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: fit-content;
+  margin-top: 0.5rem;
+  transition: all 0.3s ease;
+  align-self: center;
+}
+
+.contact-form button:hover {
+  background: linear-gradient(to right, #0077ff, #6a5acd);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 119, 255, 0.25);
+}
+
+.contact-info {
+  margin-top: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.info-item {
+  width: 260px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.info-item .icon {
+  font-size: 2rem;
+  color: #6a5acd;
+}
+
+.info-item h4 {
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  color: var(--heading-color);
+}
+
+.info-item p,
+.info-item a {
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+@media (min-width: 1024px) {
+  .contact-wrapper {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width:1000px) {
+  .contact-section{
+    margin-bottom: 5rem;
+  }
+}

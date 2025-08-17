@@ -1,0 +1,15 @@
+fastapi>=0.95.0,<1.0.0
+uvicorn[standard]>=0.22.0,<0.28.0
+numpy==1.26.4
+opencv-contrib-python-headless==4.8.0.76
+skin-tone-classifier==1.2.6
+mediapipe==0.10.5
+joblib>=1.3.0
+python-multipart>=0.0.6
+scikit-learn>=1.3.2
+os
+colorsys
+pickle
+traceback
+pydantic
+requests

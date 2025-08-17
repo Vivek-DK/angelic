@@ -1,0 +1,77 @@
+.faq-wrapper {
+  background: var(--faq-bg);
+  padding: 4rem 8% 5rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+@keyframes appear {
+  from{
+    opacity: 0;
+    scale: 0.4;
+  }
+
+  to{
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+.faq-title {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+  color: var(--faq-title);
+  animation: appear 5s linear;
+  animation-timeline: view() ;
+  animation-range:entry 0% cover 40%;
+}
+
+.faq-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  animation: appear 5s linear;
+  animation-timeline: view() ;
+  animation-range:entry 0% cover 40%;
+}
+
+
+.faq-box {
+  background: var(--faq-box-bg);
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.faq-box:hover{
+  transform: scale(1.01);
+}
+
+.faq-toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 1.1rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  color: var(--faq-question);
+}
+
+.faq-content {
+  padding: 0 1.4rem 1rem 2.6rem;
+  font-size: 0.95rem;
+  color: var(--faq-answer);
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+.faq-content p {
+  margin: 0;
+}

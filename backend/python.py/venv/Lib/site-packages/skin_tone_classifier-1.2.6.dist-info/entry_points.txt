@@ -1,0 +1,5 @@
+[console_scripts]
+stone = stone.__main__:main
+
+[gui_scripts]
+stone-gui = stone.__main__:main
