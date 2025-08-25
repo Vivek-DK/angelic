@@ -108,6 +108,9 @@
   .instruction {
     font-size: 0.95rem;
   }
+  .analysis-page{
+    margin-bottom: 3rem;
+  }
 }
 
 .palette-section {

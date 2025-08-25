@@ -56,6 +56,7 @@ const Analysis = () => {
   const [analyze, setAnalyze] = useState(false);
   const [error, setError] = useState(false);
   const [err, setErr] = useState(false)
+  const API_URL = import.meta.env.VITE_PYTHON_URL;
 
   const handleUpload = (e) => {
     const file = e.target.files[0];
@@ -77,7 +78,9 @@ const Analysis = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post("http://127.0.0.1:8000/stone", formData);
+      const res = await axios.post(`${API_URL}/stone`, formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
       const {
         skin_tone_label,
         tone_label,

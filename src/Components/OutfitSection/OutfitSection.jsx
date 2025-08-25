@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import OutfitCard from "../OutfitCard/OutfitCard";
 import "./outfitSection.css";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const OutfitSection = () => {
   const [gender, setGender] = useState("male");
@@ -10,17 +11,17 @@ const OutfitSection = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const API_BASE = import.meta.env.VITE_NODE_URL;
 
   const fetchData = useCallback(
     debounce(async (gender, category, page) => {
       setLoading(true);
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/search?gender=${gender}&category=${category}&page=${page}`
+        const res = await axios.get(
+          `${API_BASE}/api/search?gender=${gender}&category=${category}&page=${page}`
         );
-        const data = await res.json();
-        setProducts(data.products || []);
-        setTotalPages(data.totalPages || 1);
+        setProducts(res.data.products || []);
+        setTotalPages(res.data.totalPages || 1);
       } catch (err) {
         console.error("Fetch error:", err);
       } finally {

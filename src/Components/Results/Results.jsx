@@ -91,7 +91,7 @@ const Result = () => {
 
           <div className="result-card">
             <h4>
-              <FaPercentage className="icon" />Confidence
+              <FaPercentage className="icon" />Accuracy
             </h4>
             <div className="confidence-bar">
               <div className="fill" style={{ width: `${data.confidence}%` }} />

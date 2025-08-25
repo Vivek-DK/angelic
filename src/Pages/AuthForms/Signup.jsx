@@ -11,7 +11,7 @@ const Signup = () => {
   const { signup } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+  const API_BASE = import.meta.env.VITE_NODE_URL;
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -59,6 +59,10 @@ const Signup = () => {
             <button type="submit">Verify & Sign Up</button>
           </>
         )}
+
+        <p className="auth-switch">
+          Already have an account? <span onClick={() => navigate('/login')}>Log In</span>
+        </p>
       </form>
     </div>
   );

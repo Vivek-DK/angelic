@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_PYTHON_URL;
+
 export const sendMessage = async (message) => {
-  const res = await axios.post("http://localhost:8000/api/chat", {
-    message: message.text 
+  const res = await axios.post(`${API_URL}/api/chat`, {
+    message: message.text
   }, {
     headers: {
       "Content-Type": "application/json"
