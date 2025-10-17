@@ -20,23 +20,21 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/history", historyRoutes);
-app.use('/api/auth', require('./routes/auth'));
 
 app.get("/api/search", async (req, res) => {
   const { gender = "male", category = "Trending", page = 1 } = req.query;
-
   try {
-    let searchCategory = category;
-    if (category === 'Trending') {
-      searchCategory = 'trending+shirts+t-shirts+pants+hoodies+sweatshirts';
+    let searchCategory = '';
+    if (category === 'Accessories') {
+      searchCategory = 'spectacles+watches+belts+rings+bracelets+neck+chains';
     } else if (category === 'Casuals') {
       searchCategory = 'casuals+shirts+jeans+chinos+t-shirts+polos+shorts';
     } else if (category === 'Party') {
       searchCategory = 'party+jeans+blazer+shirts+pants';
     } else if (category === 'Formal'){
       searchCategory = 'formal+silk+shirts+satin+shirts+trousers';
-    }else{
-      searchCategory = 'accessories+spectacles+watches+leather belts+rings+braclets+neck chains'
+    } else if (category === 'Trending') {
+      searchCategory = 'trending+shirts+t-shirts+pants+hoodies+sweatshirts';
     }
 
     const url = `https://real-time-amazon-data.p.rapidapi.com/search?query=${searchCategory}+${gender}+clothing&page=${page}&country=IN&sort_by=BEST_SELLERS`;

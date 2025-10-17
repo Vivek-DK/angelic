@@ -118,6 +118,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s;
+  max-width: 350px;
 }
 
 .palette-section button:hover {

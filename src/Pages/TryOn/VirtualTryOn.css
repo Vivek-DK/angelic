@@ -1,0 +1,57 @@
+.tryon-container {
+  min-height: 100vh;
+  background: #f4f6f9;
+  padding: 2rem;
+  text-align: center;
+}
+
+.tryon-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.upload-form label {
+  font-weight: 600;
+  color: #444;
+}
+
+.upload-form input,
+.upload-form select {
+  margin-top: 0.5rem;
+}
+
+.upload-form button {
+  margin-top: 1rem;
+  background: #6a5acd;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.upload-form button:hover {
+  background: #5847c2;
+}
+
+.result-section {
+  margin-top: 2rem;
+}
+
+.generated-img {
+  margin-top: 1rem;
+  max-width: 300px;
+  border-radius: 12px;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.2);
+}

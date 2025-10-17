@@ -21,6 +21,7 @@ const Dashboard = () => {
   const { user, loading } = useContext(UserContext);
   const [history, setHistory] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
   const navigate = useNavigate();
 
 
@@ -66,6 +67,7 @@ const Dashboard = () => {
       });
 
       if (!result.isConfirmed) return;
+      setDeletingId(id);
 
       const res = await axios.delete(
         `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/history/delete/${id}`,
@@ -77,6 +79,8 @@ const Dashboard = () => {
     } catch (err) {
       console.error("Delete error:", err);
       toast.error(err?.response?.data?.message || "Failed to delete entry.");
+    }finally {
+      setDeletingId(null);
     }
   };
 
@@ -156,8 +160,14 @@ const Dashboard = () => {
               <button
                 className="delete-btn"
                 onClick={() => handleDelete(entry._id)}
+                disabled={deletingId === entry._id} 
               >
-                <FaTrash /> Delete
+                {deletingId === entry._id ? (
+                  <FaSpinner className="spin" />
+                ) : (
+                  <FaTrash />
+                )}{" "}
+                {deletingId === entry._id ? "Deleting..." : "Delete"}
               </button>
             </div>
           </motion.div>

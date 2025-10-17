@@ -1,7 +1,7 @@
 import React from "react";
 import "./Contact.css";
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
-import vivek from "../../assets/img3.jpg";
+import vivek from "../../assets/contact.jpg";
 
 const Contact = () => {
   const handleSubmit = (e) => {
@@ -48,14 +48,16 @@ const Contact = () => {
         <div className="info-item">
           <FaPhoneAlt className="icon" />
           <h4>Phone</h4>
-          <p>7348862962<br />6360354928</p>
+          {<p>7348862962 {/*<br />sharath: 9538080550<br />supreeth: 8792722208 */}</p>}
         </div>
         <div className="info-item">
           <FaEnvelope className="icon" />
           <h4>Email</h4>
           <p>
             <a href="mailto:vivek.dkrishnamurthy@gmail.com">vivek.dkrishnamurthy@gmail.com</a><br />
-            <a href="mailto:rakshitha@gmail.com">rakshitha@gmail.com</a>
+            {/* <a href="mailto:sharathgunda267@gmail.com">sharathr.22is@saividya.ac.in</a><br />
+            <a href="mailto:nayaksupreeth0@gmail.com">supreetha.22is@saividya.ac.in</a><br />
+            <a href="mailto:rakshitha@gmail.com">rakshithas.22is@saividya.ac.in</a><br /> */}
           </p>
         </div>
       </div>

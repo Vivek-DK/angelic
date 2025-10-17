@@ -71,7 +71,7 @@ const Navbar = ({ theme, setTheme }) => {
     { name: 'Home', path: '/', icon: faHome, tooltip: 'Go to Homepage' },
     { name: 'Analysis', path: '/analysis', icon: faChartLine, tooltip: 'Get your analysis' },
     { name: 'Results', path: '/results', icon: faSquarePollHorizontal, tooltip: 'Your saved results' },
-    { name: 'Try On', path: '/try-on', icon: faCameraRetro, tooltip: 'Try on outfits' },
+    // { name: 'Try On', path: '/try-on', icon: faCameraRetro, tooltip: 'Try on outfits' },
     { name: 'Contact', path: '/contact', icon: faAddressBook, tooltip: 'Get in touch' },
   ];
 

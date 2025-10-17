@@ -6,7 +6,7 @@ import Home from "./Pages/Home/Home";
 import Analysis from "./Pages/Analysis/Analysis";
 import Contact from "./Pages/Contact/Contact";
 import Features from "./Pages/Features/Features";
-import TryOn from "./Pages/TryOn/TryOn";
+import TryOn from "./Pages/TryOn/VirtualTryOn";
 import Login from "./Pages/AuthForms/Login";
 import Signup from "./Pages/AuthForms/Signup";
 import Dashboard from "./Pages/Dashborad/Dashborad";

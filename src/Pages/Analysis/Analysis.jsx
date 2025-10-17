@@ -54,23 +54,31 @@ const Analysis = () => {
   const [previewURL, setPreviewURL] = useState(null);
   const [loading, setLoading] = useState(false);
   const [analyze, setAnalyze] = useState(false);
-  const [error, setError] = useState(false);
-  const [err, setErr] = useState(false)
-  const API_URL = import.meta.env.VITE_PYTHON_URL;
+  const [error, setError] = useState(null);
+  const API_URL = 'http://127.0.0.1:8000';
 
-  const handleUpload = (e) => {
+  useEffect(() => {
+    const storedImage = localStorage.getItem("uploadedImage");
+    if (storedImage) {
+      setPreviewURL(storedImage);
+      setAnalyze(true);
+    }
+  }, []);
+
+  const handleUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
       setImageFile(file);
-      setPreviewURL(URL.createObjectURL(file));
+      const base64Img = await fileToBase64(file);
+      setPreviewURL(base64Img);
+      localStorage.setItem("uploadedImage", base64Img); 
       setAnalyze(true);
-      setError(false)
+      setError(null);
     }
   };
 
   const handleAnalyze = async () => {
-    setErr(false)
-    setError(false)
+    setError(null);
     if (!imageFile) return;
 
     const formData = new FormData();
@@ -81,6 +89,7 @@ const Analysis = () => {
       const res = await axios.post(`${API_URL}/stone`, formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
+
       const {
         skin_tone_label,
         tone_label,
@@ -99,7 +108,7 @@ const Analysis = () => {
         const result = {
           imageSrc: base64Img,
           skinTone: skin_tone_label,
-          face_shape: face_shape,
+          face_shape,
           toneSeason: tone_season,
           toneUndertone: tone_undertone,
           toneLabel: tone_label,
@@ -113,21 +122,27 @@ const Analysis = () => {
 
         toast.success("Analysis Completed!");
         navigate("/results");
-      } else {
-        setErr(true)
+
+        localStorage.removeItem("uploadedImage");
+        setPreviewURL(null);
       }
     } catch (err) {
-      setError(true)
-      console.error("ERROR:", err);
+      const backendError =
+        err.response?.data?.detail ||
+        err.response?.data?.message ||
+        err.message ||
+        "Analysis failed. Please try again.";
+
+      setError(backendError);
+      console.error("ERROR:", backendError);
     } finally {
       setLoading(false);
       setAnalyze(false);
-      setPreviewURL(null);
     }
   };
 
   document.body.onkeydown = (e) => {
-    if (e.key === 'Enter' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA'){
+    if (e.key === 'Enter' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
       handleAnalyze()
     }
   }
@@ -179,17 +194,9 @@ const Analysis = () => {
         />
       </motion.div>
 
-      {err?(
-        <>
-          <p className="no-result-msg">No valid face detected. Try another image.</p>
-        </>
-      ):(
-        <></>
-      )}
-
       {error ?(
         <>
-          <p className="no-result-msg">Please Upload a Valid .jpg, .png, .jepg Extentions Only...</p>
+          <p className="no-result-msg">{error}</p>
         </>
         
       ):(
