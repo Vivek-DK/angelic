@@ -11,7 +11,7 @@ const Signup = () => {
   const { signup } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const API_BASE = import.meta.env.VITE_NODE_URL;
+  const API_BASE = "http://localhost:5000"; // Replace with your backend URL
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -19,7 +19,6 @@ const Signup = () => {
 
   const sendOtp = async (e) => {
     e.preventDefault();
-
     try {
       await axios.post(`${API_BASE}/api/auth/send-otp`, { email: form.email });
       toast.success("OTP sent to your email");
@@ -49,7 +48,7 @@ const Signup = () => {
             <input name="name" placeholder="Your Name" required value={form.name} onChange={handleChange} />
             <input name="email" type="email" placeholder="Email Address" required value={form.email} onChange={handleChange} />
             <input name="password" type="password" placeholder="Create Password" required value={form.password} onChange={handleChange} />
-            <button type="submit">Send OTP</button>
+            <button type="submit" disabled className="signup-button">Send OTP</button>
           </>
         )}
 
@@ -64,6 +63,13 @@ const Signup = () => {
         <p className="auth-switch">
           Already have an account? <span onClick={() => navigate('/login')}>Log In</span>
         </p>
+        <p style={{ marginTop: "15px", fontSize: "14px", color: "var(--text-muted)" }}>
+              OTP sending is temporarily unavailable on the deployed site.<br />
+              Please use the following credentials to log in:
+              <br />
+              <b>Email:</b> dkvivek8@gmail.com<br />
+              <b>Password:</b> demo@123
+            </p>
       </form>
     </div>
   );
