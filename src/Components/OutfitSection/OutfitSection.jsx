@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import OutfitCard from "../OutfitCard/OutfitCard";
-import "./outfitSection.css";
+import "./OutfitSection.css";
 import { motion } from "framer-motion";
 import axios from "axios";
 
