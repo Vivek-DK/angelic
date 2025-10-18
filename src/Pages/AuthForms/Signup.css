@@ -79,3 +79,7 @@
   cursor: pointer;
   font-weight: bold;
 }
+
+.signup-button:disabled {
+  cursor: not-allowed;
+}
