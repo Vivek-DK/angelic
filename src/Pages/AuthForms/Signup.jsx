@@ -19,9 +19,7 @@ const Signup = () => {
 
   const sendOtp = async (e) => {
     e.preventDefault();
-    console.log("SEND-OTP: API_BASE =", API_BASE);
-    console.log("SEND-OTP: form.email =", form.email);
-    
+
     try {
       await axios.post(`${API_BASE}/api/auth/send-otp`, { email: form.email });
       toast.success("OTP sent to your email");

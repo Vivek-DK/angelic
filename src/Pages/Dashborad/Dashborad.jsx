@@ -70,7 +70,7 @@ const Dashboard = () => {
       setDeletingId(id);
 
       const res = await axios.delete(
-        `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/api/history/delete/${id}`,
+        `${import.meta.env.VITE_NODE_URL || 'http://localhost:5000'}/api/history/delete/${id}`,
         { headers: authHeader() }
       );
 

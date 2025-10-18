@@ -16,7 +16,7 @@ const StyledReport = () => {
     const fetchAnalysis = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"}/api/history/${id}`,
+          `${import.meta.env.VITE_NODE_URL || "http://localhost:5000"}/api/history/${id}`,
           { headers: authHeader() }
         );
         setAnalysis(res.data);
