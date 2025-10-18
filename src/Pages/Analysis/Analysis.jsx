@@ -55,7 +55,7 @@ const Analysis = () => {
   const [loading, setLoading] = useState(false);
   const [analyze, setAnalyze] = useState(false);
   const [error, setError] = useState(null);
-  const API_URL = 'http://127.0.0.1:8000';
+  const API_URL = import.meta.env.VITE_PYTHON_API_URL;
 
   useEffect(() => {
     const storedImage = localStorage.getItem("uploadedImage");

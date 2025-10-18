@@ -8,51 +8,78 @@ const nodemailer = require("nodemailer");
 
 const router = express.Router();
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS
-  }
-}); 
+const transporter = require("../utils/mailer"); 
+
 
 router.post("/send-otp", async (req, res) => {
+  console.log("SEND-OTP invoked. Body:", req.body);
+
   try {
     let { email } = req.body;
-    if (!email) return res.status(400).json({ message: 'Email is required' });
+    if (!email) {
+      console.warn("SEND-OTP: Missing email");
+      return res.status(400).json({ message: "Email is required", code: "MISSING_EMAIL" });
+    }
 
-    // Normalize email to lowercase
-    email = email.trim().toLowerCase();
+    email = String(email).trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      console.warn("SEND-OTP: Invalid email format:", email);
+      return res.status(400).json({ message: "Invalid email format", code: "INVALID_EMAIL" });
+    }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    // DB model checks
+    if (!User || !Otp) {
+      console.error("SEND-OTP: User or Otp model missing");
+      return res.status(500).json({ message: "Server misconfiguration", detail: "Models missing" });
+    }
+
+    const existingUser = await User.findOne({ email }).catch(e => {
+      console.error("SEND-OTP: DB find error:", e);
+      throw new Error("DB_LOOKUP_FAIL");
+    });
+
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: "User already exists", code: "USER_EXISTS" });
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
-    // Remove old OTP for this email
-    await Otp.deleteMany({ email });
+    await Otp.deleteMany({ email }).catch(e => console.warn("SEND-OTP: deleteMany warning:", e && e.message));
 
-    // Save new OTP in DB
-    await Otp.create({ email, otp, expiresAt });
-
-    // Send email
-    await transporter.sendMail({
-      from: process.env.MAIL_USER,
-      to: email,
-      subject: 'Your OTP Code',
-      text: `Your OTP is ${otp}. It expires in 5 minutes.`,
+    await Otp.create({ email, otp, expiresAt }).catch(e => {
+      console.error("SEND-OTP: Otp.create error:", e);
+      throw new Error("DB_SAVE_FAIL");
     });
 
-    res.json({ message: 'OTP sent successfully' });
+    if (!transporter) {
+      console.error("SEND-OTP: transporter undefined");
+      return res.status(500).json({ message: "Mail transporter not configured" });
+    }
+
+    try {
+      const info = await transporter.sendMail({
+        from: process.env.MAIL_USER,
+        to: email,
+        subject: "Your OTP Code",
+        text: `Your OTP is ${otp}. It expires in 5 minutes.`
+      });
+      return res.json({ message: "OTP sent successfully" });
+    } catch (mailErr) {
+      // Log full error
+      console.error("SEND-OTP: sendMail failed:", mailErr);
+      // Return detailed short reason to frontend (safe enough for debugging)
+      return res.status(500).json({ message: "Failed to send OTP", detail: mailErr && mailErr.message ? mailErr.message : String(mailErr) });
+    }
+
   } catch (err) {
-    console.error('Error sending OTP:', err);
-    res.status(500).json({ message: 'Failed to send OTP' });
+    console.error("SEND-OTP: Uncaught error:", err && err.stack ? err.stack : err);
+    if (err.message === "DB_LOOKUP_FAIL") return res.status(500).json({ message: "Database lookup failed" });
+    if (err.message === "DB_SAVE_FAIL") return res.status(500).json({ message: "Failed to save OTP" });
+    return res.status(500).json({ message: "Failed to send OTP", detail: err.message || String(err) });
   }
 });
+
 
 router.post("/signup", async (req, res) => {
   let { name, email, password, otp } = req.body;

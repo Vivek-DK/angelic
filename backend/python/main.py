@@ -382,33 +382,6 @@ def get_avoid_colors():
         ]
     }
 
-OUTPUT_DIR = "static/generated"
-os.makedirs(OUTPUT_DIR, exist_ok=True)
-
-@app.post("/create-model")
-async def create_model(file: UploadFile, size: str = Form(...)):
-    # Save uploaded face
-    img_path = os.path.join(OUTPUT_DIR, f"{uuid.uuid4()}.png")
-    with open(img_path, "wb") as f:
-        f.write(await file.read())
-
-    # Extract face
-    face_img = extract_face(img_path)
-    if face_img is None:
-        return {"error": "No clear face detected"}
-
-    # Generate body with dummy function
-    body_img_path = os.path.join(OUTPUT_DIR, f"model_{uuid.uuid4()}.png")
-    generate_body(face_img, size, body_img_path)
-
-    return {"model_url": f"http://localhost:8000/{body_img_path}"}
-
-@app.get("/static/generated/{filename}")
-async def get_generated(filename: str):
-    file_path = os.path.join(OUTPUT_DIR, filename)
-    return FileResponse(file_path)
-
-
 @app.get("/stone")
 async def skintone_info():
     return {"message": "Get skin tone information"}

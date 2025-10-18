@@ -11,7 +11,7 @@ const OutfitSection = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const API_BASE = 'http://localhost:5000';
+  const API_BASE = import.meta.env.NODE_API_URL || 'http://localhost:5000';
 
   const fetchData = useCallback(
     debounce(async (gender, category, page) => {
