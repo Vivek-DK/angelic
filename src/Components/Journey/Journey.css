@@ -1,0 +1,65 @@
+.journey-section {
+  padding: 3rem 8% 5rem 8%;
+  background: var(--journey-bg);
+  color: var(--journey-text);
+  text-align: center;
+}
+
+.journey-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  color: var(--title-color);
+}
+
+.journey-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.journey-card {
+  background-color: var(--card-bg);
+  padding: 1.5rem 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+
+}
+
+.journey-card:hover {
+  transform: translateY(-6px);
+}
+
+.circle-number {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 1rem;
+  background-color: #00a3d7;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.journey-card h3 {
+  font-size: 1rem;
+  color: var(--heading-color);
+  margin: 0.5rem 0;
+  line-height: 2px;
+}
+
+.journey-card p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.journey-card img {
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 1rem;
+}

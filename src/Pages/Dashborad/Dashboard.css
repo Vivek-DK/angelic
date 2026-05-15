@@ -1,0 +1,664 @@
+/* =========================================
+   DASHBOARD CONTAINER
+========================================= */
+
+.dashboard-container {
+
+  min-height: 100vh;
+
+  padding:
+    110px 2rem 4rem;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f5f7ff,
+      #eef2ff
+    );
+
+  transition:
+    background 0.35s ease;
+}
+
+
+/* =========================================
+   TITLE
+========================================= */
+
+.dashboard-title {
+
+  font-size: 2.2rem;
+
+  font-weight: 700;
+
+  text-align: center;
+
+  margin-bottom: 2rem;
+
+  color: #1e293b;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.dashboard-search {
+
+  width: 90%;
+
+  max-width: 540px;
+
+  margin:
+    0 auto 2.5rem;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding:
+    14px 18px;
+
+  border-radius: 18px;
+
+  background:
+    rgba(255,255,255,0.88);
+
+  backdrop-filter: blur(12px);
+
+  border:
+    1px solid rgba(255,255,255,0.4);
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.05);
+
+  transition: 0.3s ease;
+
+  overflow: hidden;
+}
+
+.dashboard-search:focus-within {
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 14px 35px rgba(46,134,222,0.15);
+}
+
+.dashboard-search svg {
+
+  color: #64748b;
+
+  font-size: 1rem;
+}
+
+.dashboard-search input {
+
+  width: 100%;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  font-size: 1rem;
+
+  color: #111827;
+}
+
+.dashboard-search input::placeholder {
+
+  color: #94a3b8;
+}
+
+
+/* =========================================
+   GRID
+========================================= */
+
+.dashboard-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 1.5rem;
+}
+
+
+/* =========================================
+   CARD
+========================================= */
+
+.dashboard-card {
+
+  position: relative;
+
+  overflow: hidden;
+
+  min-width: 0;
+
+  background:
+    rgba(255,255,255,0.88);
+
+  backdrop-filter: blur(18px);
+
+  border:
+    1px solid rgba(255,255,255,0.4);
+
+  border-radius: 1.4rem;
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.06);
+
+  display: flex;
+
+  flex-direction: column;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border 0.3s ease;
+}
+
+.dashboard-card:hover {
+
+  transform:
+    translateY(-6px);
+
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.12);
+
+  border:
+    1px solid rgba(46,134,222,0.25);
+}
+
+
+/* =========================================
+   IMAGE
+========================================= */
+
+.dashboard-img {
+
+  width: 100%;
+
+  height: 200px;
+
+  object-fit: contain;
+
+  background: #f8fafc;
+
+  padding: 10px;
+
+  border-radius:
+    1.4rem 1.4rem 0 0;
+
+  transition:
+    transform 0.35s ease;
+}
+
+.dashboard-card:hover .dashboard-img {
+
+  transform: scale(1.03);
+}
+
+
+/* =========================================
+   META
+========================================= */
+
+.dashboard-meta {
+
+  padding: 1.2rem;
+}
+
+.dashboard-meta h3 {
+
+  font-size: 1.2rem;
+
+  font-weight: 700;
+
+  margin-bottom: 0.9rem;
+
+  color: #111827;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.dashboard-meta p {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin: 8px 0;
+
+  font-size: 0.9rem;
+
+  color: #475569;
+
+  line-height: 1.4;
+}
+
+.dashboard-meta svg {
+
+  color: #2e86de;
+
+  min-width: 16px;
+}
+
+
+/* =========================================
+   COLORS
+========================================= */
+
+.dashboard-colors {
+
+  padding:
+    0 1.2rem 1rem;
+}
+
+.dashboard-colors strong {
+
+  font-size: 0.95rem;
+
+  color: #111827;
+}
+
+.color-grid {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  justify-content: center;
+
+  gap: 0.8rem;
+
+  margin-top: 0.8rem;
+}
+
+.color-item {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  width: 60px;
+}
+
+.color-circle {
+
+  width: 34px;
+
+  height: 34px;
+
+  border-radius: 50%;
+
+  border:
+    2px solid rgba(255,255,255,0.6);
+
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.1);
+
+  transition:
+    transform 0.25s ease;
+}
+
+.color-circle:hover {
+
+  transform: scale(1.1);
+}
+
+.color-name {
+
+  margin-top: 5px;
+
+  font-size: 0.7rem;
+
+  text-align: center;
+
+  color: #475569;
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.dashboard-actions {
+
+  display: flex;
+
+  gap: 0.8rem;
+
+  padding: 1.2rem;
+}
+
+.dashboard-actions button {
+
+  flex: 1;
+
+  border: none;
+
+  border-radius: 12px;
+
+  padding:
+    0.8rem 0.9rem;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  font-size: 0.85rem;
+
+  font-weight: 600;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+
+/* PDF BUTTON */
+
+.dashboard-actions button:first-child {
+
+  background:
+    linear-gradient(
+      135deg,
+      #2e86de,
+      #2563eb
+    );
+
+  color: white;
+}
+
+.dashboard-actions button:first-child:hover {
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(37,99,235,0.25);
+}
+
+
+/* DELETE BUTTON */
+
+.delete-btn {
+
+  background:
+    linear-gradient(
+      135deg,
+      #ef4444,
+      #dc2626
+    ) !important;
+
+  color: white;
+}
+
+.delete-btn:hover {
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(239,68,68,0.25);
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.dashboard-loading,
+.dashboard-empty {
+
+  min-height: 80vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 18px;
+
+  font-size: 1.1rem;
+
+  color: #475569;
+
+  text-align: center;
+}
+
+
+/* =========================================
+   SPINNER
+========================================= */
+
+.spin {
+
+  animation:
+    spin 1s linear infinite;
+}
+
+@keyframes spin {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================
+   DARK MODE
+========================================= */
+
+body.dark {
+
+  background:
+    linear-gradient(
+      135deg,
+      #0f172a,
+      #111827
+    );
+
+  color: #f1f5f9;
+}
+
+body.dark .dashboard-container {
+
+  background:
+    linear-gradient(
+      135deg,
+      #0f172a,
+      #111827
+    );
+}
+
+body.dark .dashboard-title {
+
+  color: #f8fafc;
+}
+
+body.dark .dashboard-search {
+
+  background:
+    rgba(17,24,39,0.7);
+
+  border:
+    1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+    0 12px 28px rgba(0,0,0,0.35);
+}
+
+body.dark .dashboard-search input {
+
+  color: white;
+}
+
+body.dark .dashboard-search input::placeholder {
+
+  color: #94a3b8;
+}
+
+body.dark .dashboard-search svg {
+
+  color: #cbd5e1;
+}
+
+body.dark .dashboard-card {
+
+  background:
+    rgba(17,24,39,0.78);
+
+  border:
+    1px solid rgba(255,255,255,0.06);
+
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.35);
+}
+
+body.dark .dashboard-meta h3 {
+
+  color: #f8fafc;
+}
+
+body.dark .dashboard-meta p,
+body.dark .color-name,
+body.dark .dashboard-empty,
+body.dark .dashboard-loading {
+
+  color: #cbd5e1;
+}
+
+body.dark .dashboard-colors strong {
+
+  color: white;
+}
+
+body.dark .dashboard-img {
+
+  background: #0f172a;
+}
+
+body.dark .color-circle {
+
+  border-color:
+    rgba(255,255,255,0.15);
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
+
+  .dashboard-grid {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+}
+
+
+@media (max-width: 768px) {
+
+  .dashboard-container {
+
+    padding:
+      95px 1.2rem 5rem;
+  }
+
+  .dashboard-grid {
+
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-title {
+
+    font-size: 1.8rem;
+  }
+
+  .dashboard-img {
+
+    height: 180px;
+  }
+
+  .dashboard-actions {
+
+    flex-direction: column;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .dashboard-container {
+
+    padding:
+      85px 1rem 5rem;
+  }
+
+  .dashboard-title {
+
+    font-size: 1.5rem;
+  }
+
+  .dashboard-search {
+
+    padding:
+      12px 14px;
+  }
+
+  .dashboard-img {
+
+    height: 160px;
+  }
+
+  .dashboard-meta h3 {
+
+    font-size: 1.05rem;
+  }
+
+  .dashboard-meta p {
+
+    font-size: 0.82rem;
+  }
+
+  .dashboard-actions button {
+
+    font-size: 0.82rem;
+  }
+}
