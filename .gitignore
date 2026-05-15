@@ -7,8 +7,6 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
 dist-ssr
 *.local
 
@@ -26,4 +24,12 @@ dist-ssr
 __pycache__/
 *.pyc
 
+node_modules
+backend/node/node_modules
+
+venv
+backend/python/venv
+
 .env
+dist
+build
