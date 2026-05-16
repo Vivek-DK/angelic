@@ -37,7 +37,7 @@ export const fetchHistory =
         `/api/history/all?search=${search}`
       );
 
-    return response.data;
+    return response.data.data;
   };
 
 
@@ -54,23 +54,24 @@ export const fetchSingleHistory =
         `/api/history/${id}`
       );
 
-    return response.data;
+    return response.data.data;
   };
 
   // ==========================================
   // FETCH REPORT
   // ==========================================
 
-  export const fetchReport =
-    async (id) => {
+ export const fetchReport =
+  async (id) => {
 
-      const response =
-        await api.get(
-          `/api/history/${id}`
-        );
+    const response =
+      await api.get(
 
-      return response.data;
-    };
+        `/api/history/${id}`
+      );
+
+    return response.data.data;
+  };  
 
 
 // ==========================================

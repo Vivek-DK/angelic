@@ -83,10 +83,16 @@ const StyledReport = () => {
 
         try {
 
-          const data =
+          const response =
             await fetchReport(id);
 
-          setAnalysis(data);
+          const reportData =
+
+            response.data ||
+
+            response;
+
+          setAnalysis(reportData);
 
         } catch (err) {
 

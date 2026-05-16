@@ -559,46 +559,39 @@ const Navbar = ({
 
 
         {/* ================================= */}
-        {/* MOBILE NAV */}
+        {/* MOBILE NAVIGATION */}
         {/* ================================= */}
 
         <div className="mobile-nav">
 
-          {navElements.map(
+          {navElements.map((el, index) => (
 
-            (el, index) => (
+            <NavLink
 
-              <NavLink
+              key={index}
 
-                key={index}
+              to={el.path}
 
-                to={el.path}
+              className={({ isActive }) =>
 
-                className={
+                isActive
 
-                  ({ isActive }) =>
+                  ? "mobile-nav-link active"
 
-                    isActive
+                  : "mobile-nav-link"
+              }
+            >
 
-                      ? "mobile-nav-link active"
+              <FontAwesomeIcon
+                icon={el.icon}
+              />
 
-                      : "mobile-nav-link"
-                }
-              >
+              <span>
+                {el.name}
+              </span>
 
-                <FontAwesomeIcon
-                  icon={el.icon}
-                />
-
-                <span>
-
-                  {el.name}
-
-                </span>
-
-              </NavLink>
-            )
-          )}
+            </NavLink>
+          ))}
 
         </div>
 

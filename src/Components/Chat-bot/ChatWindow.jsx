@@ -33,7 +33,29 @@
       setLoading(true);
 
       try {
-        const response = await sendMessage(userMessage);
+
+        const analysis =
+          JSON.parse(
+
+            localStorage.getItem(
+              "analysisResult"
+            )
+          );
+          
+        const response =
+          await sendMessage({
+
+            message: text,
+
+            skinTone:
+              analysis?.skinTone,
+
+            faceShape:
+              analysis?.faceShape,
+
+            season:
+              analysis?.toneSeason
+        });
 
         if (response.type === "text") {
           setMessages((prev) => [

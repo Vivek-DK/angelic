@@ -1,55 +1,45 @@
-const express = require('express');
-const multer = require('multer');
-const History = require('../models/History');
-const auth = require('../middleware/auth');
+const express = require("express");
+
+const History = require("../models/History");
+
+const auth = require("../middleware/auth");
+
 const validate = require(
   "../middleware/validate"
 );
 
-const { historySchema } = require("../validators/historyValidator");
+const {
+  historySchema
+} = require(
+  "../validators/historyValidator"
+);
+
+const generateViewUrl = require(
+  "../utils/generateViewUrl"
+);
+
+const {
+  DeleteObjectCommand
+} = require(
+  "@aws-sdk/client-s3"
+);
+
+const s3 = require(
+  "../utils/s3"
+);
 
 const router = express.Router();
 
-const parseHistoryFields = ( req, res, next ) => {
 
-  try {
+// ==========================================
+// ADD HISTORY
+// ==========================================
 
-    if (req.body.colors) {
-
-      req.body.colors = JSON.parse(
-        req.body.colors
-      );
-    }
-
-    if (req.body.colorsName) {
-
-      req.body.colorsName = JSON.parse(
-        req.body.colorsName
-      );
-    }
-
-    next();
-
-  } catch (err) {
-
-    return res.status(400).json({
-
-      success: false,
-
-      message:
-        "Invalid colors format"
-    });
-  }
-};
-
-// POST /api/history/add
 router.post(
 
   "/add",
 
   auth,
-
-  parseHistoryFields,
 
   validate(historySchema),
 
@@ -57,15 +47,11 @@ router.post(
 
     try {
 
-      const { analysisName, skinTone, faceShape, colors, colorsName } = req.body;
-
-      const entry = await History.create({
-
-        userId: req.userId,
-
-        imageKey,
+      const {
 
         analysisName,
+
+        imageKey,
 
         skinTone,
 
@@ -73,41 +59,99 @@ router.post(
 
         colors,
 
-        colorsName
-      });
+        colorsName,
 
-      const io = req.app.get("io");
+        avoidColors,
 
-      io.emit("analysis_completed", {
+        avoidColorsName
 
-        message:
-          "New analysis completed",
+      } = req.body;
 
-        analysisId: entry._id,
 
-        faceShape:
-          entry.faceShape,
-        
-        skinTone:
-          entry.skinTone
+      const entry =
+        await History.create({
 
-      });
+          userId:
+            req.userId,
 
-      res.status(201).json({ 
+          analysisName,
+
+          imageKey,
+
+          skinTone,
+
+          faceShape,
+
+          colors,
+
+          colorsName,
+
+          avoidColors,
+
+          avoidColorsName
+        });
+
+
+      // ======================================
+      // SOCKET EVENT
+      // ======================================
+
+      const io =
+        req.app.get("io");
+
+      io.emit(
+
+        "analysis_completed",
+
+        {
+
+          message:
+            "New analysis completed",
+
+          analysisId:
+            entry._id,
+
+          faceShape:
+            entry.faceShape,
+
+          skinTone:
+            entry.skinTone
+        }
+      );
+
+
+      res.status(201).json({
+
         success: true,
+
         data: entry
       });
 
     } catch (err) {
+
+      console.error(
+
+        "Save history error:",
+
+        err
+      );
+
       next(err);
     }
   }
 );
 
-// GET /api/history/all
+
+// ==========================================
+// FETCH ALL HISTORY
+// ==========================================
+
 router.get(
+
   "/all",
+
   auth,
+
   async (req, res) => {
 
     try {
@@ -119,23 +163,12 @@ router.get(
       } = req.query;
 
 
-      // ======================================
-      // QUERY
-      // ======================================
-
       const query = {
 
-        userId: req.userId,
-
-        deleted: {
-          $ne: true
-        }
+        userId:
+          req.userId
       };
 
-
-      // ======================================
-      // SEARCH FILTER
-      // ======================================
 
       if (search.trim()) {
 
@@ -148,21 +181,41 @@ router.get(
       }
 
 
-      // ======================================
-      // FETCH
-      // ======================================
-
       const histories =
         await History.find(query)
 
           .sort({
-            date: -1
+
+            createdAt: -1
           });
 
 
-      res.status(200).json(
-        histories
-      );
+      const formattedHistories =
+
+        await Promise.all(
+
+          histories.map(
+
+            async (item) => ({
+
+              ...item.toObject(),
+
+              imageUrl:
+
+                await generateViewUrl(
+                  item.imageKey
+                )
+            })
+          )
+        );
+
+
+      res.status(200).json({
+
+        success: true,
+
+        data: formattedHistories
+      });
 
     } catch (err) {
 
@@ -175,6 +228,8 @@ router.get(
 
       res.status(500).json({
 
+        success: false,
+
         message:
           "Failed to fetch history"
       });
@@ -182,7 +237,11 @@ router.get(
   }
 );
 
-// GET /api/history/:id  → Get specific history entry for logged-in user
+
+// ==========================================
+// FETCH SINGLE HISTORY
+// ==========================================
+
 router.get(
 
   "/:id",
@@ -196,14 +255,13 @@ router.get(
       const history =
         await History.findOne({
 
-          _id: req.params.id,
+          _id:
+            req.params.id,
 
-          userId: req.userId,
-
-          deleted: {
-            $ne: true
-          }
+          userId:
+            req.userId
         });
+
 
       if (!history) {
 
@@ -216,11 +274,24 @@ router.get(
         });
       }
 
+
+      const formattedHistory = {
+
+        ...history.toObject(),
+
+        imageUrl:
+
+          await generateViewUrl(
+            history.imageKey
+          )
+      };
+
+
       res.status(200).json({
 
         success: true,
 
-        data: history
+        data: formattedHistory
       });
 
     } catch (err) {
@@ -229,6 +300,11 @@ router.get(
     }
   }
 );
+
+
+// ==========================================
+// DELETE HISTORY
+// ==========================================
 
 router.delete(
 
@@ -243,10 +319,17 @@ router.delete(
       const history =
         await History.findOne({
 
-          _id: req.params.id,
+          _id:
+            req.params.id,
 
-          userId: req.userId
+          userId:
+            req.userId
         });
+
+
+      // ================================
+      // NOT FOUND
+      // ================================
 
       if (!history) {
 
@@ -254,25 +337,48 @@ router.delete(
 
           success: false,
 
-          message: "History not found"
+          message:
+            "History not found"
         });
       }
 
-      if (history.cloudinaryId) {
 
-        await cloudinary
-          .uploader
-          .destroy(
-            history.cloudinaryId
-          );
+      // ================================
+      // DELETE S3 IMAGE
+      // ================================
+
+      if (history.imageKey) {
+
+        const deleteCommand =
+          new DeleteObjectCommand({
+
+            Bucket:
+              process.env.AWS_BUCKET_NAME,
+
+            Key:
+              history.imageKey
+          });
+
+        await s3.send(
+          deleteCommand
+        );
       }
+
+
+      // ================================
+      // DELETE MONGODB ENTRY
+      // ================================
 
       await History.deleteOne({
 
-        _id: req.params.id,
-
-        userId: req.userId
+        _id:
+          req.params.id
       });
+
+
+      // ================================
+      // RESPONSE
+      // ================================
 
       res.status(200).json({
 
@@ -284,9 +390,14 @@ router.delete(
 
     } catch (err) {
 
+      console.error(
+        "Delete history error:",
+        err
+      );
+
       next(err);
     }
   }
-);  
+);
 
 module.exports = router;

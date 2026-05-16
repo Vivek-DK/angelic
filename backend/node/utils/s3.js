@@ -2,7 +2,6 @@ const {
   S3Client
 } = require("@aws-sdk/client-s3");
 
-
 const s3 = new S3Client({
 
   region:
@@ -15,7 +14,13 @@ const s3 = new S3Client({
 
     secretAccessKey:
       process.env.AWS_SECRET_ACCESS_KEY
-  }
+  },
+
+  requestChecksumCalculation:
+    "WHEN_REQUIRED",
+
+  responseChecksumValidation:
+    "WHEN_REQUIRED"
 });
 
 module.exports = s3;

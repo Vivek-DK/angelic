@@ -72,10 +72,7 @@ router.post(
             process.env.AWS_BUCKET_NAME,
 
           Key:
-            imageKey,
-
-          ContentType:
-            fileType
+            imageKey
         });
 
 

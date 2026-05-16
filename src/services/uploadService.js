@@ -26,16 +26,31 @@ export const generateUploadUrl =
 
 
 export const uploadToS3 =
-  async (uploadUrl, file) => {
+  async (
+    uploadUrl,
+    file
+  ) => {
 
-    await axios.put(
-      uploadUrl,
-      file,
-      {
-        headers: {
-          "Content-Type":
-            file.type
+    const response =
+      await fetch(
+
+        uploadUrl,
+
+        {
+          method: "PUT",
+          body: file
         }
-      }
-    );
+      );
+
+    if (!response.ok) {
+
+      const text =
+        await response.text();
+
+      console.error(text);
+
+      throw new Error(
+        "S3 upload failed"
+      );
+    }
   };

@@ -211,7 +211,7 @@ const Analysis = () => {
       );
     };
 
-  }, [imageFile, analysisName]);
+  }, [imageFile]);
 
 
   // =====================================================
@@ -628,110 +628,6 @@ const Analysis = () => {
         )}
 
       </motion.button>
-
-      {/* SAVE ANALYSIS MODAL */}
-
-      {showSaveModal && (
-
-        <div className="save-modal-overlay">
-
-          <motion.div
-
-            className="save-modal"
-
-            initial={{
-              opacity: 0,
-              scale: 0.8
-            }}
-
-            animate={{
-              opacity: 1,
-              scale: 1
-            }}
-          >
-
-            <h2>
-
-              Save Analysis
-
-            </h2>
-
-            <p>
-
-              Give this analysis a name
-              so you can search it later.
-
-            </p>
-
-            <input
-
-              type="text"
-
-              placeholder=
-                "Example: Office Look"
-
-              value={analysisName}
-
-              onChange={(e) =>
-                setAnalysisName(
-                  e.target.value
-                )
-              }
-
-              className="save-analysis-input"
-            />
-
-            <div className="save-modal-actions">
-
-              <button
-
-                className="cancel-btn"
-
-                onClick={() => {
-
-                  setShowSaveModal(false);
-
-                  navigate("/results");
-                }}
-              >
-
-                Skip
-
-              </button>
-
-
-              <button
-
-                className="save-btn"
-
-                onClick={handleSaveAnalysis}
-
-                disabled={saving}
-              >
-
-                {saving ? (
-
-                  <>
-
-                    <FaSpinner className="spin" />
-
-                    Saving...
-
-                  </>
-
-                ) : (
-
-                  "Save Analysis"
-                )}
-
-              </button>
-
-            </div>
-
-          </motion.div>
-
-        </div>
-      )}
 
     </section>
   );

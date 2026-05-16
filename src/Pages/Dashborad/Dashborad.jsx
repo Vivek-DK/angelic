@@ -112,14 +112,7 @@ const Dashboard = () => {
             searchTerm
           );
 
-        setHistory(
-
-          Array.isArray(response)
-
-            ? response
-
-            : []
-        );
+        setHistory(response || []);
 
       } catch (err) {
 
@@ -533,7 +526,7 @@ const Dashboard = () => {
             </div>
 
 
-            {/* COLORS */}
+            {/* SUITABLE COLORS */}
 
             <div className=
               "dashboard-colors"
@@ -590,9 +583,62 @@ const Dashboard = () => {
                 )}
 
               </div>
-
             </div>
 
+            {/* AVOID COLORS */}
+
+            {entry.avoidColors?.length > 0 && (
+
+              <div className="dashboard-colors avoid-section">
+
+                <p>
+
+                  <strong>
+                    Avoid Colors
+                  </strong>
+
+                </p>
+
+                <div className="color-grid">
+
+                  {entry.avoidColors.map(
+
+                    (color, i) => (
+
+                      <div
+
+                        key={i}
+
+                        className="color-item"
+                      >
+
+                        <div
+
+                          className="color-circle"
+
+                          style={{
+                            backgroundColor:
+                              color
+                          }}
+                        />
+
+                        <p className="color-name">
+
+                          {
+                            entry
+                            .avoidColorsName?.[i]
+                          }
+
+                        </p>
+
+                      </div>
+                    )
+                  )}
+
+                </div>
+
+              </div>
+            )}
 
             {/* ACTIONS */}
 

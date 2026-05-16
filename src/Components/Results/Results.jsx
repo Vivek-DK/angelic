@@ -233,6 +233,8 @@ const Result = () => {
 
       } = uploadData;
 
+      console.log(uploadUrl);
+
 
       // ======================================
       // UPLOAD TO S3
@@ -269,6 +271,16 @@ const Result = () => {
 
         colorsName:
           data.suitableColors.map(
+            (c) => c.name
+          ),
+
+        avoidColors:
+          data.avoidColors.map(
+            (c) => c.hex
+          ),
+
+        avoidColorsName:
+          data.avoidColors.map(
             (c) => c.name
           )
       });
