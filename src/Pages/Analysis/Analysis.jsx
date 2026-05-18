@@ -6,7 +6,9 @@ import React, {
 
 import "./Analysis.css";
 
-import { motion } from "framer-motion";
+import { 
+  motion 
+} from "framer-motion";
 
 import {
   FaMagic,
@@ -25,17 +27,25 @@ import {
   FaHeart
 } from "react-icons/fa";
 
-import { toast } from "react-toastify";
+import { 
+  toast 
+} from "react-toastify";
 
-import { useNavigate } from "react-router-dom";
+import { 
+  useNavigate
+} from "react-router-dom";
 
 import Swal from "sweetalert2";
 
 import fileToBase64 from "../../utils/fileToBase64";
 
-import {
-  analyzeImage
+import { 
+  analyzeImage 
 } from "../../services/analysisService";
+
+import {
+  useSocket
+} from "../../context/SocketContext";
 
 const quotes = [
 
@@ -136,11 +146,20 @@ const Analysis = () => {
   const [loading, setLoading] =
     useState(false);
 
+  const [progress, setProgress] =
+  useState(0);
+
+  const [progressText,
+    setProgressText] =
+      useState("");
+
   const [canAnalyze, setCanAnalyze] =
     useState(false);
 
   const [error, setError] =
     useState(null);
+
+  const socket = useSocket();
 
   // =====================================================
   // SERVER WAKEUP POPUP
@@ -213,6 +232,56 @@ const Analysis = () => {
 
   }, [imageFile]);
 
+  // =====================================================
+  // SOCKET.IO LISTENTER 
+  // =====================================================
+
+  useEffect(() => {
+
+    if (!socket) return;
+
+    socket.on(
+
+      "analysis_progress",
+
+      (data) => {
+
+        console.log(data);
+
+        setProgress(data.progress);
+
+        setProgressText(data.step);
+      }
+    );
+
+    socket.on(
+
+      "analysis_completed",
+
+      (data) => {
+
+        console.log(data);
+
+        setProgress(100);
+
+        setProgressText(
+          data.message
+        );
+      }
+    );
+
+    return () => {
+
+      socket.off(
+        "analysis_progress"
+      );
+
+      socket.off(
+        "analysis_completed"
+      );
+    };
+
+  }, [socket]);
 
   // =====================================================
   // HANDLE IMAGE UPLOAD
@@ -276,24 +345,61 @@ const Analysis = () => {
       return;
     }
 
+    let progressInterval;
+
     try {
 
       setLoading(true);
 
       setError(null);
 
-      // ==========================================
+      setProgress(5);
+
+      setProgressText(
+        "Uploading image..."
+      );
+
+
+      // ======================================
+      // FAKE SMOOTH PROGRESS
+      // ======================================
+
+      progressInterval =
+        setInterval(() => {
+
+          setProgress((prev) => {
+
+            if (prev >= 90)
+              return prev;
+
+            return prev + 5;
+          });
+
+        }, 500);
+
+
+      // ======================================
       // ANALYZE IMAGE
-      // ==========================================
+      // ======================================
 
       const analysisData =
         await analyzeImage(
           imageFile
         );
 
-      // ==========================================
+
+      // ======================================
+      // UPDATE TEXT
+      // ======================================
+
+      setProgressText(
+        "Generating recommendations..."
+      );
+
+
+      // ======================================
       // EXTRACT RESPONSE
-      // ==========================================
+      // ======================================
 
       const {
 
@@ -324,23 +430,21 @@ const Analysis = () => {
       } = analysisData;
 
 
-      // ==========================================
+      // ======================================
       // FACE CHECK
-      // ==========================================
+      // ======================================
 
       if (face_id !== 1) {
 
-        toast.error(
+        throw new Error(
           "Face detection failed."
         );
-
-        return;
       }
 
 
-      // ==========================================
+      // ======================================
       // CONVERT IMAGE
-      // ==========================================
+      // ======================================
 
       const base64Img =
         await fileToBase64(
@@ -348,9 +452,9 @@ const Analysis = () => {
         );
 
 
-      // ==========================================
+      // ======================================
       // RESULT OBJECT
-      // ==========================================
+      // ======================================
 
       const result = {
 
@@ -391,9 +495,9 @@ const Analysis = () => {
       };
 
 
-      // ==========================================
+      // ======================================
       // STORE RESULT
-      // ==========================================
+      // ======================================
 
       localStorage.setItem(
 
@@ -403,19 +507,51 @@ const Analysis = () => {
       );
 
 
-      // ==========================================
-      // SUCCESS
-      // ==========================================
+      // ======================================
+      // COMPLETE PROGRESS
+      // ======================================
+
+      clearInterval(
+        progressInterval
+      );
+
+      setProgress(100);
+
+      setProgressText(
+        "Analysis completed"
+      );
+
+
+      // ======================================
+      // SMALL DELAY FOR UX
+      // ======================================
+
+      await new Promise(
+
+        (resolve) =>
+
+          setTimeout(
+            resolve,
+            1200
+          )
+      );
+
 
       toast.success(
         "Analysis completed!"
       );
 
+
       navigate("/results");
+
 
     } catch (err) {
 
       console.error(err);
+
+      clearInterval(
+        progressInterval
+      );
 
       const backendError =
 
@@ -427,13 +563,19 @@ const Analysis = () => {
 
         "Analysis failed.";
 
-      setError(backendError);
+      setError(
+        backendError
+      );
 
       toast.error(
         backendError
       );
 
     } finally {
+
+      clearInterval(
+        progressInterval
+      );
 
       setLoading(false);
 
@@ -574,6 +716,33 @@ const Analysis = () => {
         </p>
       )}
 
+      {/* PROGRESS */}
+
+      {loading && (
+
+        <div className="analysis-progress">
+
+          <div className="progress-bar">
+
+            <div
+
+              className="progress-fill"
+
+              style={{
+                width: `${progress}%`
+              }}
+            />
+
+          </div>
+
+          <p className="progress-text">
+
+            {progressText}
+
+          </p>
+
+        </div>
+      )}
 
       {/* ANALYZE BUTTON */}
 

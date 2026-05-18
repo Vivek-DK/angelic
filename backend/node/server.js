@@ -85,6 +85,76 @@ const io = new Server(server, {
 
 app.set("io", io);
 
+setInterval(() => {
+
+  const randomNotification =
+
+    fashionNotifications[
+
+      Math.floor(
+
+        Math.random() *
+
+        fashionNotifications.length
+      )
+    ];
+
+
+  io.emit(
+
+    "system_notification",
+
+    randomNotification
+  );
+
+  console.log(
+
+    "Notification sent:",
+
+    randomNotification
+  );
+
+}, 60000);
+
+const fashionNotifications = [
+
+  {
+
+    title:
+      "Style Tip",
+
+    message:
+      "Try face shape analysis for better hairstyle recommendations."
+  },
+
+  {
+
+    title:
+      "Color Match",
+
+    message:
+      "Analyze your skin tone to discover premium outfit palettes."
+  },
+
+  {
+
+    title:
+      "Fashion AI",
+
+    message:
+      "Your wardrobe looks better when colors match your undertone."
+  },
+
+  {
+
+    title:
+      "New Feature",
+
+    message:
+      "AI fashion assistant is now available inside Angelic AI."
+  }
+];
+
 io.on("connection", (socket) => {
 
   console.log(

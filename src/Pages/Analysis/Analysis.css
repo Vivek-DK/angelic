@@ -155,159 +155,70 @@
   color: #f33;
 }
 
-.save-modal-overlay {
-
-  position: fixed;
-
-  inset: 0;
-
-  background:
-    rgba(0,0,0,0.6);
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  z-index: 9999;
-
-  backdrop-filter: blur(6px);
-}
-
-
-.save-modal {
-
-  width: 90%;
-
-  max-width: 420px;
-
-  background: white;
-
-  border-radius: 24px;
-
-  padding: 2rem;
-
-  box-shadow:
-    0 10px 40px
-    rgba(0,0,0,0.2);
-
-  text-align: center;
-}
-
-
-.save-modal h2 {
-
-  font-size: 1.8rem;
-
-  margin-bottom: 0.8rem;
-
-  color: #222;
-}
-
-
-.save-modal p {
-
-  color: #666;
-
-  margin-bottom: 1.5rem;
-
-  line-height: 1.5;
-}
-
-
-.save-analysis-input {
+.analysis-progress {
 
   width: 100%;
 
-  padding: 14px 16px;
+  max-width: 500px;
 
-  border-radius: 14px;
-
-  border:
-    1px solid #ddd;
-
-  font-size: 1rem;
-
-  outline: none;
-
-  margin-bottom: 1.5rem;
-
-  transition: 0.3s;
-}
-
-
-.save-analysis-input:focus {
-
-  border-color: #7c3aed;
-
-  box-shadow:
-    0 0 0 4px
-    rgba(124,58,237,0.15);
-}
-
-
-.save-modal-actions {
+  margin: 1.5rem auto;
 
   display: flex;
 
-  gap: 1rem;
+  flex-direction: column;
+
+  gap: 0.75rem;
 }
 
+.progress-bar {
 
-.cancel-btn,
-.save-btn {
+  width: 100%;
 
-  flex: 1;
+  height: 14px;
 
-  border: none;
+  border-radius: 999px;
 
-  border-radius: 14px;
+  overflow: hidden;
 
-  padding: 14px;
+  background:
+    rgba(255,255,255,0.08);
 
-  font-size: 1rem;
+  border:
+    1px solid rgba(255,255,255,0.08);
 
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: 0.3s;
+  backdrop-filter: blur(10px);
 }
 
+.progress-fill {
 
-.cancel-btn {
+  height: 100%;
 
-  background: #eee;
+  border-radius: 999px;
 
-  color: #333;
-}
-
-
-.cancel-btn:hover {
-
-  background: #ddd;
-}
-
-
-.save-btn {
+  transition:
+    width 0.4s ease;
 
   background:
     linear-gradient(
-      135deg,
-      #7c3aed,
-      #9333ea
+      90deg,
+      #8b5cf6,
+      #6366f1,
+      #3b82f6
     );
 
-  color: white;
+  box-shadow:
+    0 0 20px rgba(99,102,241,0.5);
 }
 
+.progress-text {
 
-.save-btn:hover {
+  text-align: center;
 
-  transform: translateY(-2px);
+  color: #ffffff;
 
-  box-shadow:
-    0 8px 20px
-    rgba(124,58,237,0.25);
+  font-size: 0.95rem;
+
+  font-weight: 500;
+
+  letter-spacing: 0.3px;
 }

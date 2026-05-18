@@ -192,3 +192,493 @@
   0% { transform: rotate(0); }
   100% { transform: rotate(360deg); }
 }
+
+/* ==========================================
+   SAVE MODAL OVERLAY
+========================================== */
+
+.save-modal-overlay {
+
+  position: fixed;
+
+  inset: 0;
+
+  width: 100%;
+
+  height: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  padding: 1rem;
+
+  background:
+    rgba(10, 10, 15, 0.55);
+
+  backdrop-filter: blur(12px);
+
+  -webkit-backdrop-filter: blur(12px);
+
+  z-index: 9999;
+
+  animation:
+    fadeOverlay 0.3s ease;
+}
+
+
+/* ==========================================
+   MODAL CARD
+========================================== */
+
+.save-modal {
+
+  position: relative;
+
+  width: 100%;
+
+  max-width: 430px;
+
+  padding: 2.3rem;
+
+  border-radius: 28px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,0.92),
+      rgba(248,248,252,0.82)
+    );
+
+  border:
+    1px solid rgba(255,255,255,0.35);
+
+  box-shadow:
+    0 25px 60px rgba(0,0,0,0.18),
+    0 10px 25px rgba(0,0,0,0.08);
+
+  backdrop-filter: blur(18px);
+
+  -webkit-backdrop-filter: blur(18px);
+
+  animation:
+    modalFloat 0.4s ease;
+}
+
+
+/* Glow Effect */
+
+.save-modal::before {
+
+  content: "";
+
+  position: absolute;
+
+  top: -120px;
+
+  right: -120px;
+
+  width: 240px;
+
+  height: 240px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 140, 180, 0.22),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+.save-modal::after {
+
+  content: "";
+
+  position: absolute;
+
+  bottom: -120px;
+
+  left: -120px;
+
+  width: 220px;
+
+  height: 220px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(120, 140, 255, 0.18),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+
+/* ==========================================
+   TITLE
+========================================== */
+
+.save-modal h2 {
+
+  position: relative;
+
+  z-index: 2;
+
+  font-size: 2rem;
+
+  font-weight: 700;
+
+  color: #1b1b1f;
+
+  margin-bottom: 0.7rem;
+
+  letter-spacing: -0.5px;
+}
+
+
+/* ==========================================
+   DESCRIPTION
+========================================== */
+
+.save-modal p {
+
+  position: relative;
+
+  z-index: 2;
+
+  font-size: 0.98rem;
+
+  line-height: 1.6;
+
+  color: #666;
+
+  margin-bottom: 1.8rem;
+}
+
+
+/* ==========================================
+   INPUT
+========================================== */
+
+.save-analysis-input {
+
+  position: relative;
+
+  z-index: 2;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 1rem 1.15rem;
+
+  border-radius: 16px;
+
+  border:
+    1.5px solid rgba(0,0,0,0.08);
+
+  background:
+    rgba(255,255,255,0.65);
+
+  color: #111;
+
+  font-size: 1rem;
+
+  font-weight: 500;
+
+  outline: none;
+
+  transition:
+    all 0.25s ease;
+
+  box-shadow:
+    inset 0 1px 3px rgba(0,0,0,0.04);
+}
+
+
+.save-analysis-input::placeholder {
+
+  color: #9b9b9b;
+}
+
+.save-analysis-input:focus {
+
+  border-color: #7b61ff;
+
+  background: #fff;
+
+  box-shadow:
+    0 0 0 5px rgba(123, 97, 255, 0.12);
+}
+
+
+/* ==========================================
+   BUTTON WRAPPER
+========================================== */
+
+.save-modal-actions {
+
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 1rem;
+
+  margin-top: 2rem;
+}
+
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.save-modal-actions button {
+
+  border: none;
+
+  cursor: pointer;
+
+  padding: 0.9rem 1.5rem;
+
+  border-radius: 14px;
+
+  font-size: 0.95rem;
+
+  font-weight: 600;
+
+  transition:
+    all 0.25s ease;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 0.6rem;
+}
+
+
+/* Cancel */
+
+.cancel-btn {
+
+  background:
+    rgba(0,0,0,0.06);
+
+  color: #333;
+}
+
+.cancel-btn:hover {
+
+  background:
+    rgba(0,0,0,0.12);
+
+  transform: translateY(-2px);
+}
+
+
+/* Save */
+
+.save-btn {
+
+  background:
+    linear-gradient(
+      135deg,
+      #7b61ff,
+      #5f8dff
+    );
+
+  color: white;
+
+  box-shadow:
+    0 10px 20px rgba(123, 97, 255, 0.25);
+}
+
+.save-btn:hover {
+
+  transform:
+    translateY(-2px)
+    scale(1.02);
+
+  box-shadow:
+    0 14px 28px rgba(123, 97, 255, 0.32);
+}
+
+.save-btn:disabled {
+
+  opacity: 0.7;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* ==========================================
+   SPINNER
+========================================== */
+
+.spin {
+
+  animation:
+    spin 0.9s linear infinite;
+}
+
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes spin {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeOverlay {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalFloat {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(20px)
+      scale(0.92);
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+/* ==========================================
+   DARK MODE
+========================================== */
+
+body.dark .save-modal {
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(28,28,35,0.96),
+      rgba(18,18,24,0.92)
+    );
+
+  border:
+    1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+    0 25px 60px rgba(0,0,0,0.5);
+}
+
+body.dark .save-modal h2 {
+
+  color: #fff;
+}
+
+body.dark .save-modal p {
+
+  color: #b8b8c5;
+}
+
+body.dark .save-analysis-input {
+
+  background:
+    rgba(255,255,255,0.05);
+
+  border:
+    1px solid rgba(255,255,255,0.08);
+
+  color: #fff;
+}
+
+body.dark .save-analysis-input::placeholder {
+
+  color: #888;
+}
+
+body.dark .save-analysis-input:focus {
+
+  border-color: #8d78ff;
+
+  box-shadow:
+    0 0 0 5px rgba(141, 120, 255, 0.18);
+}
+
+body.dark .cancel-btn {
+
+  background:
+    rgba(255,255,255,0.08);
+
+  color: #fff;
+}
+
+body.dark .cancel-btn:hover {
+
+  background:
+    rgba(255,255,255,0.14);
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 600px) {
+
+  .save-modal {
+
+    padding: 1.7rem;
+
+    border-radius: 22px;
+  }
+
+  .save-modal h2 {
+
+    font-size: 1.6rem;
+  }
+
+  .save-modal-actions {
+
+    flex-direction: column;
+  }
+
+  .save-modal-actions button {
+
+    width: 100%;
+  }
+}
