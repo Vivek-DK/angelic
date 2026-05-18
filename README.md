@@ -199,52 +199,50 @@ MongoDB Database
 
 # 🧰 TECH STACK
 
-FRONTEND
-• React.js
-• Framer Motion
-• Tailwind CSS
-• Axios
-• React Router
-• React Toastify
+## FRONTEND
 
-BACKEND
-• Node.js
-• Express.js
-• FastAPI
-• Socket.IO
-• JWT Authentication
-• Joi Validation
-
-AI / ML
-• Python
-• OpenCV
-• Facial Landmark Detection
-• Image Processing
-• LLM APIs
-
-DATABASE & CLOUD
-• MongoDB
-• AWS S3
-• Signed URL Uploads
-
-DEPLOYMENT
-• Vercel
-• Render
+- React.js
+- Framer Motion
+- Tailwind CSS
+- Axios
+- React Router
+- React Toastify
 
 ---
 
-# 🔐 SECURITY & BACKEND ENGINEERING
+## BACKEND
 
-Implemented production-style backend security practices:
+- Node.js
+- Express.js
+- FastAPI
+- Socket.IO
+- JWT Authentication
+- Joi Validation
 
-✔ JWT Authentication
-✔ Protected Routes
-✔ Request Validation
-✔ Rate Limiting
-✔ Secure AWS S3 Signed URLs
-✔ Input Sanitization
-✔ Error Handling Middleware
-✔ Secure API Architecture
+---
+
+## AI / ML
+
+- Python
+- OpenCV
+- Facial Landmark Detection
+- Image Processing
+- LLM APIs
+
+---
+
+## DATABASE & CLOUD
+
+- MongoDB
+- AWS S3
+- Signed URL Uploads
+
+---
+
+## DEPLOYMENT
+
+- Vercel
+- Render
 
 ---
 
@@ -275,31 +273,60 @@ ANGELIC/
 │
 └── README.md
 ```
+---
+
+# 🔐 SECURITY & BACKEND ENGINEERING
+
+Implemented production-style backend security practices:
+
+- JWT Authentication
+- Protected Routes
+- Request Validation
+- Rate Limiting
+- Secure AWS S3 Signed URLs
+- Input Sanitization
+- Error Handling Middleware
+- Secure API Architecture
+
+---
 
 # ⚙ INSTALLATION & SETUP
 
-1️⃣ CLONE REPOSITORY
+## 1️⃣ Clone Repository
 
+```bash
 git clone https://github.com/Vivek-DK/angelic.git
+```
 
-2️⃣ INSTALL FRONTEND
+---
 
+## 2️⃣ Install Frontend
+
+```bash
 cd frontend
 
 npm install
 
 npm run dev
+```
 
-3️⃣ INSTALL NODE BACKEND
+---
 
+## 3️⃣ Install Node Backend
+
+```bash
 cd backend/node
 
 npm install
 
 npm run dev
+```
 
-4️⃣ INSTALL PYTHON BACKEND
+---
 
+## 4️⃣ Install Python Backend
+
+```bash
 cd backend/python
 
 python -m venv venv
@@ -309,19 +336,25 @@ venv\Scripts\activate
 pip install -r requirements.txt
 
 uvicorn main:app --reload
+```
 
 ---
 
 # 🔑 ENVIRONMENT VARIABLES
 
-FRONTEND (.env)
+## FRONTEND (.env)
 
+```bash
 VITE_NODE_API_URL=
 
 VITE_PYTHON_API_URL=
+```
 
-NODE BACKEND (.env)
+---
 
+## NODE BACKEND (.env)
+
+```bash
 PORT=
 
 MONGO_URI=
@@ -335,79 +368,94 @@ AWS_SECRET_ACCESS_KEY=
 AWS_REGION=
 
 AWS_BUCKET_NAME=
+```
 
-PYTHON BACKEND (.env)
+---
 
+## PYTHON BACKEND (.env)
+
+```bash
 OPENROUTER_API_KEY=
+```
 
 ---
 
 # 📈 ENGINEERING HIGHLIGHTS
 
-FULL STACK ENGINEERING
+## FULL STACK ENGINEERING
 
-✔ React + Node.js + FastAPI Integration
-✔ REST API Architecture
-✔ Microservice-Based Backend Design
-✔ Secure Authentication System
-✔ Cloud-Based Image Storage
+- React + Node.js + FastAPI Integration
+- REST API Architecture
+- Microservice-Based Backend Design
+- Secure Authentication System
+- Cloud-Based Image Storage
 
-PERFORMANCE OPTIMIZATION
+---
 
-✔ Browser-Side Image Compression
-✔ Reduced Upload Payload Size
-✔ Optimized API Processing Flow
-✔ Faster Upload & Analysis Experience
+## PERFORMANCE OPTIMIZATION
 
-REAL-TIME SYSTEMS
+- Browser-Side Image Compression
+- Reduced Upload Payload Size
+- Optimized API Processing Flow
+- Faster Upload & Analysis Experience
 
-✔ WebSocket Integration
-✔ Live Notifications
-✔ Interactive UI Updates
-✔ Real-Time User Communication
+---
 
-AI INTEGRATION
+## REAL-TIME SYSTEMS
 
-✔ Fashion-Focused AI Chatbot
-✔ Facial Analysis Pipeline
-✔ Personalized Recommendation Engine
-✔ Skin Tone & Face Shape Detection
+- WebSocket Integration
+- Live Notifications
+- Interactive UI Updates
+- Real-Time User Communication
+
+---
+
+## AI INTEGRATION
+
+- Fashion-Focused AI Chatbot
+- Facial Analysis Pipeline
+- Personalized Recommendation Engine
+- Skin Tone & Face Shape Detection
 
 ---
 
 # 🧪 FUTURE IMPROVEMENTS
 
-• Virtual Outfit Try-On
-• AI Hairstyle Preview
-• Fashion Recommendation Feed
-• Multi-Image Comparison
-• Personalized Wardrobe Planner
-• Recommendation Analytics
-• Mobile Application Support
+- Virtual Outfit Try-On
+- AI Hairstyle Preview
+- Fashion Recommendation Feed
+- Multi-Image Comparison
+- Personalized Wardrobe Planner
+- Recommendation Analytics
+- Mobile Application Support
 
 ---
 
 # 👨‍💻 DEVELOPER
 
-Vivek D K
+## Vivek D K
 
 Full Stack Developer focused on:
 
-• Scalable Backend Systems
-• AI-Integrated Applications
-• Cloud-Based Architectures
-• Modern Frontend Engineering
-• Real-Time Web Applications
+- Scalable Backend Systems
+- AI-Integrated Applications
+- Cloud-Based Architectures
+- Modern Frontend Engineering
+- Real-Time Web Applications
 
-CONNECT
+---
 
-LinkedIn
+## CONNECT
+
+### LinkedIn
+
 https://www.linkedin.com/
 
-GitHub
+### GitHub
+
 https://github.com/Vivek-DK
 
---- 
+---
 
 # ⭐ FINAL NOTE
 
@@ -415,11 +463,11 @@ ANGELIC is not just a UI-based fashion website.
 
 It is a complete AI-integrated engineering project combining:
 
-✔ Machine Learning
-✔ Cloud Infrastructure
-✔ Real-Time Systems
-✔ Full Stack Development
-✔ Scalable Architecture
-✔ AI-Based Recommendation Systems
+- Machine Learning
+- Cloud Infrastructure
+- Real-Time Systems
+- Full Stack Development
+- Scalable Architecture
+- AI-Based Recommendation Systems
 
 into a production-style application experience.
