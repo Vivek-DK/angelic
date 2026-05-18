@@ -12,6 +12,9 @@ const authRoutes = require("./routes/auth");
 const historyRoutes = require("./routes/history");
 const uploadRoutes = require("./routes/upload");
 
+const compression =
+  require("compression");
+
 const errorHandler = require(
   "./middleware/errorHandler"
 );
@@ -21,6 +24,10 @@ const connectDB = require("./db");
 const app = express();
 
 app.use(cors({
+
+  origin: [
+    "http://localhost:5173"
+  ],
 
   methods: [
     "GET",
@@ -37,6 +44,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(compression());
 
 connectDB();
 
@@ -114,7 +122,7 @@ setInterval(() => {
     randomNotification
   );
 
-}, 60000);
+}, 300000);
 
 const fashionNotifications = [
 

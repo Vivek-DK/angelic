@@ -39,13 +39,11 @@ import Swal from "sweetalert2";
 
 import fileToBase64 from "../../utils/fileToBase64";
 
+import optimizeImage from "../../utils/optimizeImage";
+
 import { 
   analyzeImage 
 } from "../../services/analysisService";
-
-import {
-  useSocket
-} from "../../context/SocketContext";
 
 const quotes = [
 
@@ -159,8 +157,6 @@ const Analysis = () => {
   const [error, setError] =
     useState(null);
 
-  const socket = useSocket();
-
   // =====================================================
   // SERVER WAKEUP POPUP
   // =====================================================
@@ -231,57 +227,6 @@ const Analysis = () => {
     };
 
   }, [imageFile]);
-
-  // =====================================================
-  // SOCKET.IO LISTENTER 
-  // =====================================================
-
-  useEffect(() => {
-
-    if (!socket) return;
-
-    socket.on(
-
-      "analysis_progress",
-
-      (data) => {
-
-        console.log(data);
-
-        setProgress(data.progress);
-
-        setProgressText(data.step);
-      }
-    );
-
-    socket.on(
-
-      "analysis_completed",
-
-      (data) => {
-
-        console.log(data);
-
-        setProgress(100);
-
-        setProgressText(
-          data.message
-        );
-      }
-    );
-
-    return () => {
-
-      socket.off(
-        "analysis_progress"
-      );
-
-      socket.off(
-        "analysis_completed"
-      );
-    };
-
-  }, [socket]);
 
   // =====================================================
   // HANDLE IMAGE UPLOAD
@@ -382,11 +327,42 @@ const Analysis = () => {
       // ANALYZE IMAGE
       // ======================================
 
-      const analysisData =
-        await analyzeImage(
+      setProgressText(
+        "Optimizing image..."
+      );
+
+      // IMAGE COMPRASSING 
+
+      const optimizedImage =
+
+        await optimizeImage(
           imageFile
         );
 
+      const analysisData =
+        await analyzeImage(
+          optimizedImage
+        );
+
+      console.log(
+
+        "Original:",
+
+        (imageFile.size / 1024 / 1024)
+          .toFixed(2),
+
+        "MB"
+      );
+
+      console.log(
+
+        "Optimized:",
+
+        (optimizedImage.size / 1024 / 1024)
+          .toFixed(2),
+
+        "MB"
+      );
 
       // ======================================
       // UPDATE TEXT
@@ -446,9 +422,13 @@ const Analysis = () => {
       // CONVERT IMAGE
       // ======================================
 
+      console.log(
+        optimizedImage
+      );
+
       const base64Img =
         await fileToBase64(
-          imageFile
+          optimizedImage
         );
 
 
@@ -505,7 +485,6 @@ const Analysis = () => {
 
         JSON.stringify(result)
       );
-
 
       // ======================================
       // COMPLETE PROGRESS

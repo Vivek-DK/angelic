@@ -1,17 +1,38 @@
-const fileToBase64 = (file) => {
+const fileToBase64 = (
+  file
+) => {
 
   return new Promise(
+
     (resolve, reject) => {
+
+      if (!file) {
+
+        reject(
+
+          new Error(
+            "File is missing"
+          )
+        );
+
+        return;
+      }
 
       const reader =
         new FileReader();
 
       reader.onload = () =>
-        resolve(reader.result);
 
-      reader.onerror = reject;
+        resolve(
+          reader.result
+        );
 
-      reader.readAsDataURL(file);
+      reader.onerror =
+        reject;
+
+      reader.readAsDataURL(
+        file
+      );
     }
   );
 };

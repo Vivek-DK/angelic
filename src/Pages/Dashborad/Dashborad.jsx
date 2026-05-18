@@ -460,6 +460,8 @@ const Dashboard = () => {
 
               src={entry.imageUrl}
 
+              loading="lazy"
+
               alt="Analysis"
 
               className="dashboard-img"

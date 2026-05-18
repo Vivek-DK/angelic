@@ -14,6 +14,7 @@ from mediapipe.tasks.python import vision
 from dotenv import load_dotenv
 from chatbot.router import router as chatbot_router
 from models.face_utils import extract_face
+import traceback
 
 print("MAIN STARTED")
 print("Current Directory:", os.getcwd())
@@ -648,6 +649,7 @@ async def process_image(
     image_file: UploadFile = File(...)
 ):
 
+    temp_path = None
     try:
 
         contents = await image_file.read()
@@ -661,7 +663,7 @@ async def process_image(
                 detail="Only JPG/PNG images are supported."
             )
 
-        temp_path = "temp_image.jpg"
+        temp_path = f"temp_{uuid.uuid4()}.jpg"
 
         with open(temp_path, "wb") as f:
 
@@ -795,6 +797,18 @@ async def process_image(
             []
         )
 
+        if not faces:
+
+            raise HTTPException(
+
+                status_code=400,
+
+                detail=(
+                    "No face detected. "
+                    "Please upload a clear image."
+                )
+            )
+
         face = faces[0]
 
         accuracy = float(
@@ -926,18 +940,21 @@ async def process_image(
 
     except Exception as e:
 
-        print(
-            "Unexpected error:",
-            str(e)
-        )
+        print("\n===== FULL ERROR =====")
+
+        traceback.print_exc()
+
+        print("======================\n")
 
         raise HTTPException(
+
             status_code=500,
-            detail="Internal server error."
+
+            detail=str(e)
         )
 
     finally:
 
-        if os.path.exists(temp_path):
+        if temp_path and os.path.exists(temp_path):
 
             os.remove(temp_path)
