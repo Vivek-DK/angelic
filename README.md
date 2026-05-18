@@ -200,13 +200,36 @@ MongoDB Database
 # 🧰 TECH STACK
 
 ## FRONTEND
-
 - React.js
 - Framer Motion
 - Tailwind CSS
 - Axios
 - React Router
 - React Toastify
+
+## BACKEND
+- Node.js
+- Express.js
+- FastAPI
+- Socket.IO
+- JWT Authentication
+- Joi Validation
+
+## AI / ML
+- Python
+- OpenCV
+- Facial Landmark Detection
+- Image Processing
+- LLM APIs
+
+## DATABASE & CLOUD
+- MongoDB
+- AWS S3
+- Signed URL Uploads
+
+## DEPLOYMENT
+- Vercel
+- Render
 
 ---
 
