@@ -1,283 +1,425 @@
-# 🌟 ANGELIC – AI-Powered Skin Tone & Face Shape Analysis
+# ✨ ANGELIC — AI Fashion Recommendation System
 
-> **ANGELIC** is a full-stack AI-driven styling assistant that analyzes facial features and skin tone from user images to deliver personalized fashion, color, and grooming recommendations. The system combines computer vision, machine learning, and modern web technologies to provide accurate, explainable, and user-centric styling insights.
+> An AI-powered fashion intelligence platform that analyzes facial structure, skin tone, undertone, and seasonal palette to deliver personalized styling recommendations in real time.
 
-**Purpose**
-Help users understand *what suits them*—based on measurable facial attributes, skin tone classification, and seasonal color theory—instead of generic fashion advice.
-
-**Key Highlights**
-
-* Face shape detection using facial landmarks
-* Skin tone classification using color-space analysis
-* Personalized color recommendations (suitable & avoid)
-* AI-powered chatbot for styling guidance
-* Secure authentication and scalable backend
+<br/>
 
 ---
 
-## 🧰 Tech Stack
+# 🌐 Live Demo
 
-### 🎨 Frontend
-- ⚛️ **React.js** – Component-based UI
-- ⚡ **Vite** – Fast development and build tooling
-- 🎞️ **Framer Motion** – Smooth UI animations
-- 🎨 **CSS / Modern UI Practices**
+🔗 Live Website:  
+https://angelic-viv.vercel.app/
 
-### 🖥️ Backend
-- 🟢 **Node.js** – REST API & authentication layer
-- 🚀 **Express.js** – Backend routing and middleware
-- 🐍 **Python (FastAPI)** – ML inference & chatbot services
-- 🔐 **JWT Authentication** – Secure user sessions
-
-### 🧠 Machine Learning & Computer Vision
-- 👁️ **Facial Landmark Detection** – Face shape analysis
-- 🎨 **Skin Tone Classification** – RGB → HLS color-space mapping
-- 🌈 **Seasonal Color Theory Mapping** – Suitable & avoid palettes
-- 📦 **skin-tone-classifier** – Skin color extraction
-- 🌲 **Random Forest** – Trained classification model
-
-### 🗄️ Database & Storage
-- 🍃 **MongoDB** – User data & analysis history
-- ☁️ **Cloudinary** – Image storage & optimization
-
-### 🤖 AI & Integrations
-- 💬 **OpenRouter API** – AI-powered styling chatbot
-- 🧠 **Gemma Model** – Conversational fashion guidance
-
-### ⚙️ DevOps & Tools
-- 🌐 **Vercel** – Frontend deployment
-- 🛠️ **Render** – Backend & ML service hosting
-- 🔁 **Git & GitHub** – Version control
-- 🧪 **Postman** – API testing
-- 🔐 **dotenv** – Environment variable management
-
-## 📑 Table of Contents
-
-* [Installation & Setup](#-installation--setup)
-* [Usage](#-usage)
-* [Features](#-features)
-* [Project Structure](#-project-structure)
-* [Tests](#-tests)
-* [Contributing Guidelines](#-contributing-guidelines)
-* [Credits / Authors](#-credits--authors)
-* [License](#-license)
+📦 GitHub Repository:  
+https://github.com/Vivek-DK/angelic
 
 ---
 
-## 🛠️ Installation & Setup
+# 🧠 Project Vision
 
-### Prerequisites
+ANGELIC was built to bridge the gap between:
 
-* Node.js (v18+ recommended)
-* Python 3.9
-* MongoDb
-* Git
+- Artificial Intelligence
+- Fashion Styling
+- Personal Appearance Analysis
+- Real-Time User Interaction
 
-### 1️⃣ Clone the Repository
+Instead of generic fashion suggestions, the platform provides:
+
+✔ Personalized color recommendations  
+✔ Face-shape based styling guidance  
+✔ Seasonal fashion palette detection  
+✔ AI-driven fashion assistant  
+✔ Real-time analysis experience  
+
+This project combines:
+- Computer Vision
+- Machine Learning
+- Full Stack Engineering
+- Cloud Infrastructure
+- Real-Time Systems
+
+into a single scalable application.
+
+---
+
+# 🚀 Core Features
+
+## 🎨 Skin Tone Detection
+
+Analyzes:
+- skin tone
+- undertone
+- seasonal palette
+
+using image processing and ML models.
+
+### Detects:
+- Warm Undertone
+- Cool Undertone
+- Neutral Undertone
+
+### Seasonal Analysis:
+- Summer
+- Winter
+- Autumn
+- Spring
+
+---
+
+## 👤 Face Shape Analysis
+
+Uses facial landmark detection to identify:
+
+- Oval
+- Round
+- Square
+- Heart
+- Diamond
+- Oblong
+
+Provides:
+- hairstyle guidance
+- outfit recommendations
+- accessory suggestions
+
+based on face structure.
+
+---
+
+## 🤖 AI Fashion Assistant
+
+Integrated AI chatbot powered by LLM APIs.
+
+### Capabilities:
+- outfit recommendations
+- color matching advice
+- styling suggestions
+- seasonal dressing tips
+- fashion Q&A
+
+### Restrictions:
+The assistant is intentionally restricted to:
+- fashion
+- styling
+- wardrobe
+- appearance guidance
+
+to maintain domain specialization.
+
+---
+
+## ☁ AWS S3 Cloud Image Storage
+
+Implemented secure cloud storage using:
+
+- AWS S3
+- Signed URLs
+- Secure upload pipeline
+
+### Benefits:
+✔ Secure uploads  
+✔ Faster delivery  
+✔ Scalable architecture  
+✔ Reduced backend load  
+
+---
+
+## ⚡ Image Optimization Pipeline
+
+Before analysis:
+
+- images are compressed
+- resized
+- converted to JPEG
+
+using browser-side optimization.
+
+### Impact:
+✔ Reduced upload payload size by up to 70%  
+✔ Faster uploads  
+✔ Better user experience  
+✔ Reduced API processing time  
+
+---
+
+## 🔔 Real-Time Notifications
+
+Implemented using:
+- Socket.IO
+- WebSockets
+
+### Features:
+- live notifications
+- fashion tips
+- AI assistant alerts
+- real-time user interaction
+
+without requiring manual refresh.
+
+---
+
+## 📊 Analysis History Dashboard
+
+Users can:
+- save analysis
+- view previous reports
+- fetch personalized recommendations
+- revisit color palettes
+
+with cloud-stored image retrieval.
+
+---
+
+# 🏗 System Architecture
 
 ```bash
+Frontend (React.js)
+        │
+        ▼
+Node.js + Express API
+        │
+        ├── Authentication
+        ├── History Management
+        ├── AWS S3 Upload Service
+        ├── Socket.IO Notifications
+        │
+        ▼
+FastAPI ML Service
+        │
+        ├── Skin Tone Detection
+        ├── Face Shape Analysis
+        ├── Fashion AI Assistant
+        │
+        ▼
+MongoDB Database
+```
+---
+
+# 🧰 TECH STACK
+
+FRONTEND
+• React.js
+• Framer Motion
+• Tailwind CSS
+• Axios
+• React Router
+• React Toastify
+
+BACKEND
+• Node.js
+• Express.js
+• FastAPI
+• Socket.IO
+• JWT Authentication
+• Joi Validation
+
+AI / ML
+• Python
+• OpenCV
+• Facial Landmark Detection
+• Image Processing
+• LLM APIs
+
+DATABASE & CLOUD
+• MongoDB
+• AWS S3
+• Signed URL Uploads
+
+DEPLOYMENT
+• Vercel
+• Render
+
+---
+
+# 🔐 SECURITY & BACKEND ENGINEERING
+
+Implemented production-style backend security practices:
+
+✔ JWT Authentication
+✔ Protected Routes
+✔ Request Validation
+✔ Rate Limiting
+✔ Secure AWS S3 Signed URLs
+✔ Input Sanitization
+✔ Error Handling Middleware
+✔ Secure API Architecture
+
+---
+
+# 📁 Folder Structure
+
+```bash
+ANGELIC/
+│
+├── frontend/
+│   ├── components/
+│   ├── pages/
+│   ├── services/
+│   ├── context/
+│   └── utils/
+│
+├── backend/
+│   │
+│   ├── node/
+│   │   ├── routes/
+│   │   ├── middleware/
+│   │   ├── validators/
+│   │   └── utils/
+│   │
+│   └── python/
+│       ├── routes/
+│       ├── ML/
+│       └── services/
+│
+└── README.md
+```
+
+# ⚙ INSTALLATION & SETUP
+
+1️⃣ CLONE REPOSITORY
+
 git clone https://github.com/Vivek-DK/angelic.git
-cd angelic
-```
 
-### 2️⃣ Backend – Node.js API Setup
+2️⃣ INSTALL FRONTEND
 
-```bash
-cd backend/node
-npm install
-```
-
-Create a `.env` file:
-
-
-```env
-# Server
-PORT=5000
-
-# Database
-MONGO_URI=your_mongodb_connection_string
-
-# Auth
-JWT_SECRET=your_jwt_secret_key
-
-# Cloudinary (Image Storage)
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-
-# External APIs
-RAPIDAPI_KEY=your_rapidapi_key
-
-# Email Service
-MAIL_USER=your_email_address
-MAIL_PASS=your_email_app_password
-
-```
-
-Start the server:
-
-```bash
-npm run dev
-```
-
-### 3️⃣ Backend – Python ML Service Setup
-
-```bash
-cd backend/python
-python -m venv venv
-source venv/bin/activate   # Windows: venv\\Scripts\\activate
-pip install -r requirements.txt
-```
-Create a `.env` file:
-```env
-OPENROUTER_API_KEY=your_openrouter_api_key
-```
-
-Run the FastAPI server:
-
-```bash
-uvicorn main:app --reload
-```
-
-### 4️⃣ Frontend Setup
-
-```bash
 cd frontend
+
 npm install
+
 npm run dev
-```
+
+3️⃣ INSTALL NODE BACKEND
+
+cd backend/node
+
+npm install
+
+npm run dev
+
+4️⃣ INSTALL PYTHON BACKEND
+
+cd backend/python
+
+python -m venv venv
+
+venv\Scripts\activate
+
+pip install -r requirements.txt
+
+uvicorn main:app --reload
 
 ---
 
-## ▶️ Usage
+# 🔑 ENVIRONMENT VARIABLES
 
-### Application Flow
+FRONTEND (.env)
 
-1. User uploads an image
-2. Backend validates image and detects face
-3. Facial landmarks are extracted
-4. Skin tone is classified using RGB → HLS mapping
-5. Face shape and tone are mapped to style rules
-6. Personalized recommendations are returned
+VITE_NODE_API_URL=
 
-### 📸 Demo Images
+VITE_PYTHON_API_URL=
+
+NODE BACKEND (.env)
+
+PORT=
+
+MONGO_URI=
+
+JWT_SECRET=
+
+AWS_ACCESS_KEY_ID=
+
+AWS_SECRET_ACCESS_KEY=
+
+AWS_REGION=
+
+AWS_BUCKET_NAME=
+
+PYTHON BACKEND (.env)
+
+OPENROUTER_API_KEY=
+
 ---
-## Landing Page
-![image alt](https://github.com/Vivek-DK/angelic/blob/246eccc52bb25c29fd90b16ca8eb530bd44ffde5/screenshots/home_page.png)
+
+# 📈 ENGINEERING HIGHLIGHTS
+
+FULL STACK ENGINEERING
+
+✔ React + Node.js + FastAPI Integration
+✔ REST API Architecture
+✔ Microservice-Based Backend Design
+✔ Secure Authentication System
+✔ Cloud-Based Image Storage
+
+PERFORMANCE OPTIMIZATION
+
+✔ Browser-Side Image Compression
+✔ Reduced Upload Payload Size
+✔ Optimized API Processing Flow
+✔ Faster Upload & Analysis Experience
+
+REAL-TIME SYSTEMS
+
+✔ WebSocket Integration
+✔ Live Notifications
+✔ Interactive UI Updates
+✔ Real-Time User Communication
+
+AI INTEGRATION
+
+✔ Fashion-Focused AI Chatbot
+✔ Facial Analysis Pipeline
+✔ Personalized Recommendation Engine
+✔ Skin Tone & Face Shape Detection
+
+---
+
+# 🧪 FUTURE IMPROVEMENTS
+
+• Virtual Outfit Try-On
+• AI Hairstyle Preview
+• Fashion Recommendation Feed
+• Multi-Image Comparison
+• Personalized Wardrobe Planner
+• Recommendation Analytics
+• Mobile Application Support
+
+---
+
+# 👨‍💻 DEVELOPER
+
+Vivek D K
+
+Full Stack Developer focused on:
+
+• Scalable Backend Systems
+• AI-Integrated Applications
+• Cloud-Based Architectures
+• Modern Frontend Engineering
+• Real-Time Web Applications
+
+CONNECT
+
+LinkedIn
+https://www.linkedin.com/
+
+GitHub
+https://github.com/Vivek-DK
 
 --- 
 
-## Image Upload & Analysis
-![image alt](https://github.com/Vivek-DK/angelic/blob/246eccc52bb25c29fd90b16ca8eb530bd44ffde5/screenshots/Analysis_page.png)
+# ⭐ FINAL NOTE
 
---- 
+ANGELIC is not just a UI-based fashion website.
 
-## Results & Recommendations
-![image alt](https://github.com/Vivek-DK/angelic/blob/246eccc52bb25c29fd90b16ca8eb530bd44ffde5/screenshots/result.jpeg)
+It is a complete AI-integrated engineering project combining:
 
---- 
+✔ Machine Learning
+✔ Cloud Infrastructure
+✔ Real-Time Systems
+✔ Full Stack Development
+✔ Scalable Architecture
+✔ AI-Based Recommendation Systems
 
-## Chatbot Interaction
-![image alt](https://github.com/Vivek-DK/angelic/blob/246eccc52bb25c29fd90b16ca8eb530bd44ffde5/screenshots/chat_bot.png)
-
----
-
-## ✨ Features
-
-### 🎯 Face Shape Analysis
-
-* Uses facial landmarks and geometric ratios
-* Supports common shapes: Oval, Round, Square, Heart, Diamond
-
-### 🎨 Skin Tone Detection
-
-* Extracts dominant skin color from facial regions
-* Converts RGB → HLS color space
-* Classifies tone: Fair, Light, Medium, Olive, Brown, Dark
-
-### 🎭 Seasonal Color Mapping
-
-* Maps skin tone + undertone to seasonal palettes
-* Returns **suitable** and **avoid** color suggestions
-
-### 🤖 AI Styling Chatbot
-
-* Built with FastAPI
-* Powered by OpenRouter (Gemma model)
-* Answers fashion, grooming, and styling queries
-
-### 🔐 Secure Backend
-
-* JWT-based authentication
-* Modular Node.js API design
-
----
-
-## 🗂️ Project Structure
-
-```
-backend/
-├── node/
-│   ├── log/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── utils/
-│   ├── db.js
-│   ├── package.json
-│   └── .env
-│
-├── python/
-│   ├── chatbot/
-│   ├── Face_Shape/
-│   ├── models/
-│   ├── static/
-│   ├── Trained_models/
-│   ├── main.py
-│   ├── requirements.txt
-│   └── .env
-│
-frontend/
-├── src/
-├── public/
-└── package.json
-```
-
----
-
-## 🧪 Tests
-
-Currently, testing is performed manually during development.
-
-Planned improvements:
-
-* Unit tests for skin tone classification logic
-* API endpoint tests using PyTest and Supertest
-
----
-
-## 🤝 Contributing Guidelines
-
-Contributions are welcome.
-
-1. Fork the repository
-2. Create a feature branch (`feature/your-feature`)
-3. Commit changes with clear messages
-4. Open a pull request with a detailed description
-
-For major changes, please open an issue first to discuss.
-
----
-
-## 👥 Credits / Authors
-
-* **Vivek DK** – Full Stack Developer & MERN Stack
-* Open-source libraries and research papers used for facial analysis
-
----
-
-## 📜 License
-
-This project is licensed under the **MIT License**.
-
-You are free to use, modify, and distribute this software with proper attribution.
+into a production-style application experience.
