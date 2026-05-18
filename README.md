@@ -199,7 +199,7 @@ MongoDB Database
 
 # 🧰 TECH STACK
 
-FRONTEND
+## FRONTEND
 • React.js
 • Framer Motion
 • Tailwind CSS
@@ -207,7 +207,7 @@ FRONTEND
 • React Router
 • React Toastify
 
-BACKEND
+## BACKEND
 • Node.js
 • Express.js
 • FastAPI
@@ -215,19 +215,19 @@ BACKEND
 • JWT Authentication
 • Joi Validation
 
-AI / ML
+## AI / ML
 • Python
 • OpenCV
 • Facial Landmark Detection
 • Image Processing
 • LLM APIs
 
-DATABASE & CLOUD
+## DATABASE & CLOUD
 • MongoDB
 • AWS S3
 • Signed URL Uploads
 
-DEPLOYMENT
+## DEPLOYMENT
 • Vercel
 • Render
 
