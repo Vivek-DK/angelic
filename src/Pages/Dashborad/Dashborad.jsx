@@ -244,15 +244,6 @@ const Dashboard = () => {
 
             confirmButtonColor:
               "#ef4444",
-
-            cancelButtonColor:
-              "#2563eb",
-
-            background:
-              "#111827",
-
-            color:
-              "#ffffff"
           });
 
         if (!result.isConfirmed)
