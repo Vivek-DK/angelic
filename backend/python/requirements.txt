@@ -10,3 +10,4 @@ pydantic==1.10.13
 requests==2.31.0
 httpx==0.25.2
 skin-tone-classifier==1.2.6
+xgboost==2.0.3
