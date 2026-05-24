@@ -23,6 +23,23 @@ const transporter = nodemailer.createTransport({
   }
 }); 
 
+transporter.verify(
+
+  function(error, success) {
+
+    if (error) {
+
+      console.log(error);
+
+    } else {
+
+      console.log(
+        "Mail server ready"
+      );
+    }
+  }
+);
+
 router.post(
   "/send-otp", 
   validate(sendOtpSchema),
