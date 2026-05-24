@@ -6,7 +6,7 @@ exports.historySchema =
     imageKey:
       Joi.string()
       .required(),
-
+  
     analysisName:
       Joi.string()
       .trim()

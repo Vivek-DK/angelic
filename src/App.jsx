@@ -72,11 +72,11 @@ import Signup from "./Pages/AuthForms/Signup";
 
 import Dashboard from "./Pages/Dashborad/Dashborad";
 
-import StyledReport from "./Components/StyledReport/StyledReport";
-
 import Result from "./Components/Results/Results";
 
 import UserProfile from "./Components/UserProfile/UserProfile";
+
+import ReportPage from "./Pages/ReportPage/ReportPage";
 
 
 // ==========================================
@@ -150,7 +150,7 @@ const AppRoutes = ({ theme }) => {
 
         path="/report/:id"
 
-        element={<StyledReport />}
+        element={<ReportPage />}
       />
 
       {/* ======================================

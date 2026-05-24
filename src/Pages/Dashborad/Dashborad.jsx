@@ -16,13 +16,16 @@ import {
 import Swal from "sweetalert2";
 
 import {
+
   FaTrash,
-  FaDownload,
   FaPalette,
   FaCalendarAlt,
   FaSpinner,
   FaSmile,
-  FaSearch
+  FaSearch,
+  FaExternalLinkAlt,
+  FaShareAlt
+
 } from "react-icons/fa";
 
 import { toast } from "react-toastify";
@@ -287,6 +290,63 @@ const Dashboard = () => {
         setDeletingId(null);
       }
     };
+
+  const handleShare = async (
+    entry
+  ) => {
+
+    const shareUrl =
+
+      `${window.location.origin}/report/${entry._id}`;
+
+    try {
+
+      await navigator.share({
+
+        title:
+          "Angelic AI Fashion Report",
+
+        text:
+          "Check out my AI fashion analysis report",
+
+        url: shareUrl
+      });
+
+    } catch (err) {
+
+      await navigator.clipboard.writeText(
+        shareUrl
+      );
+
+      toast.success(
+        "Report link copied!"
+      );
+    }
+  };
+
+  const handleOpenReport = (
+    entry
+  ) => {
+
+    localStorage.setItem(
+
+      "selectedReport",
+
+      JSON.stringify(entry)
+    );
+
+    navigate(
+
+      `/report/${entry._id}`,
+
+      {
+
+        state: {
+          report: entry
+        }
+      }
+    );
+  };
 
 
   // =========================================
@@ -644,40 +704,51 @@ const Dashboard = () => {
 
             {/* ACTIONS */}
 
-            <div className=
-              "dashboard-actions"
-            >
+            <div className="dashboard-actions">
+
+              {/* OPEN REPORT */}
 
               <button
 
+                className="dashboard-btn view-btn"
+
                 onClick={() =>
-
-                  navigate(
-
-                    `/report/${entry._id}`,
-
-                    {
-
-                      state: {
-
-                        analysis: entry
-                      }
-                    }
+                  handleOpenReport(
+                    entry
                   )
                 }
               >
 
-                <FaDownload />
+                <FaExternalLinkAlt />
 
-                PDF
+                View Report
 
               </button>
 
+              {/* SHARE */}
 
               <button
 
-                className=
-                  "delete-btn"
+                className="dashboard-btn share-btn"
+
+                onClick={() =>
+                  handleShare(
+                    entry
+                  )
+                }
+              >
+
+                <FaShareAlt />
+
+                Share
+
+              </button>
+
+              {/* DELETE */}
+
+              <button
+
+                className="dashboard-btn delete-btn"
 
                 onClick={() =>
                   handleDelete(
@@ -686,34 +757,20 @@ const Dashboard = () => {
                 }
 
                 disabled={
-                  deletingId ===
-                  entry._id
+                  deletingId === entry._id
                 }
               >
 
-                {deletingId ===
-                entry._id ? (
+                {deletingId === entry._id ? (
 
-                  <>
-
-                    <FaSpinner
-                      className="spin"
-                    />
-
-                    Deleting...
-
-                  </>
+                  <FaSpinner className="spin" />
 
                 ) : (
 
-                  <>
-
-                    <FaTrash />
-
-                    Delete
-
-                  </>
+                  <FaTrash />
                 )}
+
+                Delete
 
               </button>
 

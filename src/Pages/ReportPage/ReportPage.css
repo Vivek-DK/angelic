@@ -1,0 +1,81 @@
+.report-page {
+
+  min-height: 100vh;
+
+  padding: 40px 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #020617,
+      #0f172a,
+      #111827
+    );
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  overflow: hidden;
+
+  position: relative;
+}
+
+.report-page::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 500px;
+
+  height: 500px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(59,130,246,0.15),
+      transparent
+    );
+
+  top: -200px;
+
+  left: -150px;
+
+  border-radius: 50%;
+}
+
+.report-page::after {
+
+  content: "";
+
+  position: absolute;
+
+  width: 500px;
+
+  height: 500px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(236,72,153,0.12),
+      transparent
+    );
+
+  bottom: -200px;
+
+  right: -150px;
+
+  border-radius: 50%;
+}
+
+.report-loading {
+
+  color: white;
+
+  font-size: 1.2rem;
+
+  font-weight: 600;
+}

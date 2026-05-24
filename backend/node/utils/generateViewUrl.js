@@ -1,37 +1,48 @@
-const s3 = require("./s3");
-
 const {
+
   GetObjectCommand
-} = require("@aws-sdk/client-s3");
+
+} = require(
+  "@aws-sdk/client-s3"
+);
 
 const {
+
   getSignedUrl
-} = require("@aws-sdk/s3-request-presigner");
 
+} = require(
+  "@aws-sdk/s3-request-presigner"
+);
 
-const generateViewUrl = async (
-  imageKey
-) => {
+const s3 =
+  require("./s3");
 
-  const command =
-    new GetObjectCommand({
+const generateViewUrl =
+  async (imageKey) => {
 
-      Bucket:
-        process.env.AWS_BUCKET_NAME,
+    const command =
 
-      Key: imageKey
-    });
+      new GetObjectCommand({
 
-  return await getSignedUrl(
+        Bucket:
+          process.env
+            .AWS_BUCKET_NAME,
 
-    s3,
+        Key: imageKey
+      });
 
-    command,
+    return getSignedUrl(
 
-    {
-      expiresIn: 3600
-    }
-  );
-};
+      s3,
 
-module.exports = generateViewUrl;
+      command,
+
+      {
+
+        expiresIn: 3600
+      }
+    );
+  };
+
+module.exports =
+  generateViewUrl;

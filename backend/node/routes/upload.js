@@ -72,7 +72,10 @@ router.post(
             process.env.AWS_BUCKET_NAME,
 
           Key:
-            imageKey
+            imageKey,
+
+          ContentType:
+            fileType
         });
 
 
@@ -88,7 +91,7 @@ router.post(
           command,
 
           {
-            expiresIn: 60
+            expiresIn: 300
           }
         );
 

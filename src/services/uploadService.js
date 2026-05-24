@@ -25,19 +25,29 @@ export const generateUploadUrl =
   };
 
 
-export const uploadToS3 =
-  async (
+  export const uploadToS3 = async (
+
     uploadUrl,
     file
+
   ) => {
 
     const response =
+
       await fetch(
 
         uploadUrl,
 
         {
+
           method: "PUT",
+
+          headers: {
+
+            "Content-Type":
+              file.type
+          },
+
           body: file
         }
       );
@@ -47,10 +57,15 @@ export const uploadToS3 =
       const text =
         await response.text();
 
-      console.error(text);
+      console.error(
+        "S3 Error:",
+        text
+      );
 
       throw new Error(
         "S3 upload failed"
       );
     }
+
+    return true;
   };

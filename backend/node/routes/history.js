@@ -241,7 +241,6 @@ router.get(
 // ==========================================
 // FETCH SINGLE HISTORY
 // ==========================================
-
 router.get(
 
   "/:id",
@@ -253,6 +252,7 @@ router.get(
     try {
 
       const history =
+
         await History.findOne({
 
           _id:
@@ -261,7 +261,6 @@ router.get(
           userId:
             req.userId
         });
-
 
       if (!history) {
 
@@ -274,7 +273,6 @@ router.get(
         });
       }
 
-
       const formattedHistory = {
 
         ...history.toObject(),
@@ -282,10 +280,10 @@ router.get(
         imageUrl:
 
           await generateViewUrl(
+
             history.imageKey
           )
       };
-
 
       res.status(200).json({
 
@@ -300,7 +298,6 @@ router.get(
     }
   }
 );
-
 
 // ==========================================
 // DELETE HISTORY

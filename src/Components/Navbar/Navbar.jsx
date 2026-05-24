@@ -507,7 +507,7 @@ const Navbar = ({
                   <button
 
                     className=
-                      "dashboard-btn"
+                      "account-btn"
 
                     onClick={() => {
 

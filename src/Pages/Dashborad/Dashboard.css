@@ -338,30 +338,39 @@
 
 
 /* =========================================
-   ACTIONS
+   ACTION BUTTONS
 ========================================= */
 
 .dashboard-actions {
 
   display: flex;
 
-  gap: 0.8rem;
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 14px;
 
   padding: 1.2rem;
+
+  margin-top: auto;
+
+  flex-wrap: wrap;
 }
 
-.dashboard-actions button {
+.dashboard-btn {
 
   flex: 1;
 
+  min-width: 120px;
+
+  max-width: 170px;
+
+  height: 48px;
+
   border: none;
 
-  border-radius: 12px;
-
-  padding:
-    0.8rem 0.9rem;
-
-  cursor: pointer;
+  border-radius: 16px;
 
   display: flex;
 
@@ -369,44 +378,51 @@
 
   justify-content: center;
 
-  gap: 7px;
+  gap: 8px;
 
-  font-size: 0.85rem;
+  font-size: 14px;
 
   font-weight: 600;
 
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    background 0.25s ease;
+  color: white;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+
+  box-shadow:
+    0 10px 20px rgba(0,0,0,0.12);
+}
+
+.dashboard-btn:hover {
+
+  transform:
+    translateY(-3px);
 }
 
 
-/* PDF BUTTON */
-
-.dashboard-actions button:first-child {
+/* =========================================
+   BUTTON COLORS
+========================================= */
+.view-btn {
 
   background:
     linear-gradient(
       135deg,
-      #2e86de,
-      #2563eb
+      #2563eb,
+      #3b82f6
     );
-
-  color: white;
 }
 
-.dashboard-actions button:first-child:hover {
+.share-btn {
 
-  transform:
-    translateY(-2px);
-
-  box-shadow:
-    0 8px 20px rgba(37,99,235,0.25);
+  background:
+    linear-gradient(
+      135deg,
+      #9333ea,
+      #d946ef
+    );
 }
-
-
-/* DELETE BUTTON */
 
 .delete-btn {
 
@@ -415,20 +431,8 @@
       135deg,
       #ef4444,
       #dc2626
-    ) !important;
-
-  color: white;
+    );
 }
-
-.delete-btn:hover {
-
-  transform:
-    translateY(-2px);
-
-  box-shadow:
-    0 8px 20px rgba(239,68,68,0.25);
-}
-
 
 /* =========================================
    LOADING
@@ -616,9 +620,14 @@ body.dark .color-circle {
     height: 180px;
   }
 
-  .dashboard-actions {
+   .dashboard-actions {
 
     flex-direction: column;
+  }
+
+  .dashboard-btn {
+
+    width: 100%;
   }
 }
 

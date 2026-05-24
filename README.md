@@ -472,7 +472,7 @@ Full Stack Developer focused on:
 
 ### LinkedIn
 
-https://www.linkedin.com/
+https://linkedin.com/in/vivekdk1310
 
 ### GitHub
 

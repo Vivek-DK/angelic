@@ -1,361 +1,238 @@
-import React, {
-
-  useEffect,
-
-  useState
-
-} from "react";
+import React from "react";
 
 import {
-
-  useNavigate,
-
-  useParams
-
-} from "react-router-dom";
-
-import html2pdf from "html2pdf.js";
-
-import {
-
-  FaDownload,
-
-  FaArrowLeft,
-
-  FaCopyright,
-
-  FaSpinner,
 
   FaPalette,
-
-  FaSmile,
-
-  FaCalendarAlt
+  FaRegSmile,
+  FaCalendarAlt,
+  FaShareAlt,
+  FaDownload
 
 } from "react-icons/fa";
 
 import {
 
-  toast
+  formatDate
 
-} from "react-toastify";
-
-import "./StyledReport.css";
-
-import angel from "../../assets/angel.png";
+} from "../../utils/reportHelpers";
 
 import {
 
-  fetchReport
+  shareReport
 
-} from "../../services/historyService";
+} from "../../utils/shareReport";
 
+import "./StyledReport.css";
 
-const StyledReport = () => {
+const StyledReport = ({
 
-  const { id } =
-    useParams();
+  report,
+  reportRef
 
-  const navigate =
-    useNavigate();
+}) => {
 
-  const [analysis,
-    setAnalysis] =
-      useState(null);
+  const suitableColors =
 
-  const [loading,
-    setLoading] =
-      useState(true);
+    report.suitableColors ||
 
-  const [downloading,
-    setDownloading] =
-      useState(false);
+    report.colors ||
 
+    [];
 
-  // ==========================================
-  // FETCH REPORT
-  // ==========================================
+  const suitableColorNames =
 
-  useEffect(() => {
+    report.suitableColorsName ||
 
-    const loadReport =
-      async () => {
+    report.colorsName ||
 
-        try {
+    [];
 
-          const response =
-            await fetchReport(id);
+  const avoidColors =
 
-          const reportData =
+    report.avoidColors ||
 
-            response.data ||
+    [];
 
-            response;
+  const avoidColorNames =
 
-          setAnalysis(reportData);
+    report.avoidColorsName ||
 
-        } catch (err) {
+    [];
 
-          console.error(err);
+  // ======================================
+  // SHARE REPORT
+  // ======================================
 
-          toast.error(
-            "Failed to load report."
-          );
-
-          navigate("/dashboard");
-
-        } finally {
-
-          setLoading(false);
-        }
-      };
-
-    loadReport();
-
-  }, [id, navigate]);
-
-
-  // ==========================================
-  // PDF DOWNLOAD
-  // ==========================================
-
-  const downloadAsPDF =
+  const handleShare =
     async () => {
+
+      const url =
+        window.location.href;
 
       try {
 
-        setDownloading(true);
+        await navigator.share({
 
-        const element =
-          document.getElementById(
-            "report-card"
-          );
+          title:
+            "Angelic AI Report",
 
-        const options = {
+          text:
+            "Check out my AI fashion report",
 
-          margin: 0.2,
+          url
+        });
 
-          filename:
+      } catch {
 
-            `${analysis.analysisName ||
-              "Analysis"}_Report.pdf`,
-
-          image: {
-
-            type: "jpeg",
-
-            quality: 1
-          },
-
-          html2canvas: {
-
-            scale: 2,
-
-            useCORS: true,
-
-            allowTaint: false
-          },
-
-          jsPDF: {
-
-            unit: "in",
-
-            format: "letter",
-
-            orientation: "portrait"
-          }
-        };
-
-        await html2pdf()
-
-          .from(element)
-
-          .set(options)
-
-          .save();
-
-      } catch (err) {
-
-        console.error(err);
-
-        toast.error(
-          "PDF generation failed."
+        navigator.clipboard.writeText(
+          url
         );
 
-      } finally {
-
-        setDownloading(false);
+        alert(
+          "Link copied!"
+        );
       }
     };
 
-
-  // ==========================================
-  // LOADING
-  // ==========================================
-
-  if (loading) {
-
-    return (
-
-      <div className="report-loading">
-
-        <FaSpinner className="spin" />
-
-        Loading report...
-
-      </div>
-    );
-  }
-
-
-  // ==========================================
-  // EMPTY
-  // ==========================================
-
-  if (!analysis) {
-
-    return (
-
-      <div className="report-loading">
-
-        Report not found.
-
-      </div>
-    );
-  }
-
-
   return (
 
-    <div className="report-page">
+    <div className="angelic-report-wrapper">
 
-
-      {/* BACK */}
-
-      <button
-
-        className="back-btn"
-
-        onClick={() =>
-          navigate("/dashboard")
-        }
-      >
-
-        <FaArrowLeft />
-
-        Back
-
-      </button>
-
-
+      {/* ====================================== */}
       {/* REPORT */}
+      {/* ====================================== */}
 
       <div
-
-        id="report-card"
-
-        className="report-container"
+        className="angelic-report-container"
+        ref={reportRef}
       >
 
-
+        {/* ====================================== */}
         {/* HEADER */}
+        {/* ====================================== */}
 
-        <div className="report-header">
+        <div className="angelic-report-header">
 
-          <img
+          <div className="angelic-text-logo">
 
-            src={angel}
+            ANGELIC AI
 
-            alt="logo"
+          </div>
 
-            className="brand-logo"
-          />
+          <h1 className="angelic-report-title">
 
-          <h1 className="report-title">
-
-            Personal Color Analysis Report
+            Personalized Fashion Report
 
           </h1>
 
-        </div>
+          <p className="angelic-report-subtitle">
 
+            AI Powered Fashion Analysis
 
-        {/* ANALYSIS NAME */}
-
-        <div className="analysis-name">
-
-          {analysis.analysisName}
+          </p>
 
         </div>
 
+        {/* ====================================== */}
+        {/* USER IMAGE */}
+        {/* ====================================== */}
 
-        {/* IMAGE */}
+        <div className="angelic-image-wrapper">
 
-        <div className="report-image-section">
+          <div className="angelic-image-glow" />
 
           <img
 
-            src={analysis.imageUrl}
+            src={
+              report.imageUrl
+            }
 
             alt="user"
 
-            className="user-photo"
+            className="angelic-user-photo"
 
-            crossOrigin="anonymous"
           />
 
         </div>
 
+        {/* ====================================== */}
+        {/* ANALYSIS NAME */}
+        {/* ====================================== */}
 
+        <h2 className="angelic-analysis-name">
+
+          {
+            report.analysisName
+          }
+
+        </h2>
+
+        {/* ====================================== */}
         {/* DETAILS */}
+        {/* ====================================== */}
 
-        <div className="details-grid">
+        <div className="angelic-details-grid">
 
-
-          <div className="detail-card">
+          <div className="angelic-detail-card">
 
             <FaPalette />
 
             <h3>
+
               Skin Tone
+
             </h3>
 
             <p>
-              {analysis.skinTone}
+
+              {
+                report.skinTone
+              }
+
             </p>
 
           </div>
 
+          <div className="angelic-detail-card">
 
-          <div className="detail-card">
-
-            <FaSmile />
+            <FaRegSmile />
 
             <h3>
+
               Face Shape
+
             </h3>
 
             <p>
-              {analysis.faceShape ||
-                "N/A"}
+
+              {
+
+                report.faceShape ||
+
+                report.primaryFaceShape
+              }
+
             </p>
 
           </div>
 
-
-          <div className="detail-card">
+          <div className="angelic-detail-card">
 
             <FaCalendarAlt />
 
             <h3>
+
               Date
+
             </h3>
 
             <p>
 
-              {new Date(
-                analysis.createdAt
-              ).toLocaleDateString()}
+              {
+                formatDate(
+                  report.createdAt
+                )
+              }
 
             </p>
 
@@ -363,49 +240,52 @@ const StyledReport = () => {
 
         </div>
 
+        {/* ====================================== */}
+        {/* SUITABLE COLORS */}
+        {/* ====================================== */}
 
-        {/* RECOMMENDED COLORS */}
-
-        <div className="report-section">
+        <div className="angelic-report-section">
 
           <h2>
-            Recommended Colors
+
+            Suitable Colors
+
           </h2>
 
-          <div className="swatch-grid">
+          <div className="angelic-colors-grid">
 
-            {analysis.colors?.map(
+            {suitableColors.map(
 
-              (color, idx) => (
+              (
+                color,
+                index
+              ) => (
 
                 <div
-
-                  key={idx}
-
-                  className="color-card"
+                  key={index}
+                  className="angelic-color-card"
                 >
 
                   <div
 
-                    className=
-                      "color-swatch"
+                    className="angelic-color-circle"
 
                     style={{
-                      backgroundColor:
+                      background:
                         color
                     }}
                   />
 
-                  <p className=
-                    "color-name"
-                  >
+                  <span>
 
                     {
-                      analysis
-                      .colorsName?.[idx]
+
+                      suitableColorNames[index] ||
+
+                      color
                     }
 
-                  </p>
+                  </span>
 
                 </div>
               )
@@ -415,112 +295,100 @@ const StyledReport = () => {
 
         </div>
 
-
+        {/* ====================================== */}
         {/* AVOID COLORS */}
+        {/* ====================================== */}
 
-        {analysis.avoidColors?.length >
-          0 && (
+        <div className="angelic-report-section">
 
-          <div className="report-section">
+          <h2>
 
-            <h2>
-              Colors to Avoid
-            </h2>
+            Avoid Colors
 
-            <div className="swatch-grid">
+          </h2>
 
-              {analysis.avoidColors.map(
+          <div className="angelic-colors-grid">
 
-                (color, idx) => (
+            {avoidColors.map(
+
+              (
+                color,
+                index
+              ) => (
+
+                <div
+                  key={index}
+                  className="angelic-color-card"
+                >
 
                   <div
 
-                    key={idx}
+                    className="angelic-color-circle"
 
-                    className="color-card"
-                  >
+                    style={{
+                      background:
+                        color
+                    }}
+                  />
 
-                    <div
+                  <span>
 
-                      className=
-                        "color-swatch"
+                    {
 
-                      style={{
-                        backgroundColor:
-                          color
-                      }}
-                    />
+                      avoidColorNames[index] ||
 
-                    <p className=
-                      "color-name"
-                    >
+                      color
+                    }
 
-                      {color}
+                  </span>
 
-                    </p>
-
-                  </div>
-                )
-              )}
-
-            </div>
+                </div>
+              )
+            )}
 
           </div>
-        )}
 
+        </div>
 
-        {/* FOOTER */}
+        {/* ====================================== */}
+        {/* QUOTE */}
+        {/* ====================================== */}
 
-        <div className="report-footer">
+        <div className="angelic-fashion-quote">
 
-          <p>
-
-            <FaCopyright />
-
-            {" "}
-
-            2026 Angelic Fashion AI
-
-          </p>
+          “Style is confidence made visible.”
 
         </div>
 
       </div>
 
+      {/* ====================================== */}
+      {/* ACTION BUTTONS */}
+      {/* ====================================== */}
 
-      {/* DOWNLOAD */}
+      <div className="angelic-report-actions">
 
-      <button
+        <button
 
-        className="download-btn"
+          className="
+            angelic-report-btn
+            angelic-share-btn
+          "
 
-        onClick={downloadAsPDF}
+          onClick={() =>
 
-        disabled={downloading}
-      >
+            shareReport(
+              report._id
+            )
+          }
+        >
 
-        {downloading ? (
+          <FaShareAlt />
 
-          <>
+          Share Report
 
-            <FaSpinner className="spin" />
-
-            Generating PDF...
-
-          </>
-
-        ) : (
-
-          <>
-
-            <FaDownload />
-
-            Download PDF
-
-          </>
-        )}
-
-      </button>
+        </button>
+      </div>
 
     </div>
   );
