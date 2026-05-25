@@ -56,41 +56,6 @@ const optimizeImage = async (
       }
     );
 
-
-    console.log(
-
-      "Original Size:",
-
-      (
-        file.size /
-        1024 /
-        1024
-      ).toFixed(2),
-
-      "MB"
-    );
-
-    console.log(
-
-      "Optimized Size:",
-
-      (
-        finalFile.size /
-        1024 /
-        1024
-      ).toFixed(2),
-
-      "MB"
-    );
-
-    console.log(
-
-      "Optimized Type:",
-
-      finalFile.type
-    );
-
-
     return finalFile;
 
   } catch (err) {

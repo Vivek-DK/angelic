@@ -2,19 +2,21 @@ from fastapi import FastAPI, UploadFile, HTTPException, Form
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import File
+
 import stone
-import os, uuid
+import os
+import uuid
 import colorsys
-import cv2
 import numpy as np
-import mediapipe as mp
 import joblib
-from mediapipe.tasks import python
-from mediapipe.tasks.python import vision
+import traceback
+
 from dotenv import load_dotenv
 from chatbot.router import router as chatbot_router
-from models.face_utils import extract_face
-import traceback
+
+from Face_Shape.face_utils import (
+    extract_landmarks
+)
 
 print("MAIN STARTED")
 print("Current Directory:", os.getcwd())
@@ -26,370 +28,133 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-     "https://angelic-viv.vercel.app",
-     "http://localhost:5173"
-    ],  
+        "https://angelic-viv.vercel.app",
+        "http://localhost:5173"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 app.include_router(chatbot_router, prefix="/api")
-# =========================================================
-# FACE SHAPE MODEL LOADING
-# =========================================================
 
-# =========================================================
-# FACE SHAPE MODEL LOADING
-# =========================================================
 
-print("Starting app...")
-print("Current directory:", os.getcwd())
-
-face_shape_model_path = "models/face_shape_xgb.pkl"
-face_shape_scaler_path = "models/scaler.pkl"
-face_shape_pca_path = "models/pca.pkl"
-
-face_shape_labels = [
-    "Heart",
-    "Oblong",
-    "Oval",
-    "Round",
-    "Square"
-]
-
-print("Loading model...")
+print("FACE SHAPE MODEL INITIALIZATION")
+print("==============================")
 
 try:
+
+    BASE_DIR = os.path.dirname(
+        os.path.abspath(__file__)
+    )
+
+    MODELS_DIR = os.path.join(
+        BASE_DIR,
+        "Face_Shape",
+        "models"
+    )
+
+    print("\nModels Directory:")
+    print(MODELS_DIR)
+
+    # =====================================
+    # MODEL PATHS
+    # =====================================
+
+    face_shape_model_path = os.path.join(
+        MODELS_DIR,
+        "face_shape_model.pkl"
+    )
+
+    scaler_path = os.path.join(
+        MODELS_DIR,
+        "scaler.pkl"
+    )
+
+    pca_path = os.path.join(
+        MODELS_DIR,
+        "pca.pkl"
+    )
+
+    label_encoder_path = os.path.join(
+        MODELS_DIR,
+        "label_encoder.pkl"
+    )
+
+    print("\nChecking Model Files...")
+
+    print(
+        "Model Exists:",
+        os.path.exists(face_shape_model_path)
+    )
+
+    print(
+        "Scaler Exists:",
+        os.path.exists(scaler_path)
+    )
+
+    print(
+        "PCA Exists:",
+        os.path.exists(pca_path)
+    )
+
+    print(
+        "Label Encoder Exists:",
+        os.path.exists(label_encoder_path)
+    )
+
+    # =====================================
+    # LOAD MODEL
+    # =====================================
+
+    print("\nLoading Face Shape Model...")
 
     face_shape_model = joblib.load(
         face_shape_model_path
     )
 
+    print("Model Loaded")
+
     face_shape_scaler = joblib.load(
-        face_shape_scaler_path
+        scaler_path
     )
+
+    print("Scaler Loaded")
 
     face_shape_pca = joblib.load(
-        face_shape_pca_path
+        pca_path
     )
 
+    print("PCA Loaded")
+
+    label_encoder = joblib.load(
+        label_encoder_path
+    )
+
+    print("Label Encoder Loaded")
+
     print(
-        "Face shape model loaded successfully."
+        "\nFace shape model loaded successfully."
     )
 
 except Exception as e:
 
-    print(
-        "Error loading face shape model:",
-        str(e)
-    )
+    print("\n==============================")
+    print("FACE SHAPE STARTUP ERROR")
+    print("==============================")
+
+    print(str(e))
+
+    traceback.print_exc()
 
     face_shape_model = None
     face_shape_scaler = None
     face_shape_pca = None
-
-
-# =========================================================
-# IMPORTANT CONTOUR LANDMARKS
-# =========================================================
-
-FACE_SHAPE_LANDMARKS = [
-
-    10, 338, 297, 332, 284,
-
-    251, 389, 356, 454, 323,
-    361, 288, 397, 365, 379,
-
-    378, 400, 377, 152,
-
-    148, 176, 149, 150, 136,
-    172, 58, 132, 93, 234,
-    127, 162, 21, 54, 103,
-    67, 109
-]
-
-
-# =========================================================
-# MEDIAPIPE INITIALIZATION
-# =========================================================
-
-base_options = python.BaseOptions(
-    model_asset_path=
-    "Face_Shape/face_landmarker_v2_with_blendshapes.task"
-)
-
-options = vision.FaceLandmarkerOptions(
-    base_options=base_options,
-    output_face_blendshapes=False,
-    output_facial_transformation_matrixes=True,
-    num_faces=1,
-)
-
-landmarker = (
-    vision.FaceLandmarker.create_from_options(
-        options
-    )
-)
-
-
-# =========================================================
-# FACE ALIGNMENT
-# =========================================================
-
-def align_face(image, landmarks):
-
-    left_eye = landmarks[33]
-    right_eye = landmarks[263]
-
-    left = np.array([
-        left_eye.x,
-        left_eye.y
-    ])
-
-    right = np.array([
-        right_eye.x,
-        right_eye.y
-    ])
-
-    h, w = image.shape[:2]
-
-    left *= np.array([w, h])
-    right *= np.array([w, h])
-
-    dx = right[0] - left[0]
-    dy = right[1] - left[1]
-
-    angle = np.degrees(
-        np.arctan2(dy, dx)
-    )
-
-    center = (
-        float((left[0] + right[0]) / 2),
-        float((left[1] + right[1]) / 2)
-    )
-
-    matrix = cv2.getRotationMatrix2D(
-        center,
-        angle,
-        1.0
-    )
-
-    aligned = cv2.warpAffine(
-        image,
-        matrix,
-        (w, h),
-        flags=cv2.INTER_CUBIC
-    )
-
-    return aligned
-
-
-# =========================================================
-# RELAXED POSE CHECK
-# =========================================================
-
-def is_valid_pose(landmarks):
-
-    nose_x = landmarks[1].x
-
-    left_x = landmarks[234].x
-    right_x = landmarks[454].x
-
-    denominator = right_x - left_x
-
-    if denominator == 0:
-        return False
-
-    ratio = (
-        (nose_x - left_x)
-        / denominator
-    )
-
-    return 0.20 <= ratio <= 0.80
-
-
-# =========================================================
-# GEOMETRIC RATIOS
-# =========================================================
-
-def extract_geometric_ratios(coords):
-
-    forehead_width = np.linalg.norm(
-        coords[0] - coords[4]
-    )
-
-    cheekbone_width = np.linalg.norm(
-        coords[7] - coords[27]
-    )
-
-    jaw_width = np.linalg.norm(
-        coords[14] - coords[20]
-    )
-
-    face_height = np.linalg.norm(
-        coords[0] - coords[18]
-    )
-
-    chin_width = np.linalg.norm(
-        coords[16] - coords[20]
-    )
-
-    ratios = [
-
-        forehead_width / face_height,
-
-        cheekbone_width / face_height,
-
-        jaw_width / face_height,
-
-        chin_width / face_height,
-
-        forehead_width / jaw_width,
-
-        cheekbone_width / jaw_width,
-
-        face_height / cheekbone_width,
-    ]
-
-    return ratios
-
-
-# =========================================================
-# NORMALIZATION
-# =========================================================
-
-def normalize_landmarks(landmarks):
-
-    coords = []
-
-    for idx in FACE_SHAPE_LANDMARKS:
-
-        lm = landmarks[idx]
-
-        coords.append([
-            lm.x,
-            lm.y,
-            lm.z
-        ])
-
-    coords = np.array(coords)
-
-    coords = coords - coords.mean(axis=0)
-
-    scale = np.max(
-        np.linalg.norm(coords, axis=1)
-    )
-
-    if scale == 0:
-        return None
-
-    coords = coords / scale
-
-    geometric_features = (
-        extract_geometric_ratios(coords)
-    )
-
-    flattened = coords.flatten()
-
-    final_features = np.concatenate([
-        flattened,
-        geometric_features
-    ])
-
-    return final_features
-
-
-# =========================================================
-# EXTRACT FEATURES
-# =========================================================
-
-def extract_landmarks(image_path: str):
-
-    try:
-
-        image = cv2.imread(image_path)
-
-        if image is None:
-            return None
-
-        rgb = cv2.cvtColor(
-            image,
-            cv2.COLOR_BGR2RGB
-        )
-
-        mp_image = mp.Image(
-            image_format=mp.ImageFormat.SRGB,
-            data=rgb
-        )
-
-        detection = landmarker.detect(
-            mp_image
-        )
-
-        if not detection.face_landmarks:
-
-            print("No face detected.")
-
-            return None
-
-        landmarks = detection.face_landmarks[0]
-
-        if not is_valid_pose(landmarks):
-
-            print("Extreme side pose.")
-
-            return None
-
-        aligned = align_face(
-            image,
-            landmarks
-        )
-
-        rgb_aligned = cv2.cvtColor(
-            aligned,
-            cv2.COLOR_BGR2RGB
-        )
-
-        mp_aligned = mp.Image(
-            image_format=mp.ImageFormat.SRGB,
-            data=rgb_aligned
-        )
-
-        aligned_detection = landmarker.detect(
-            mp_aligned
-        )
-
-        if not aligned_detection.face_landmarks:
-
-            print("Alignment failed.")
-
-            return None
-
-        aligned_landmarks = (
-            aligned_detection.face_landmarks[0]
-        )
-
-        features = normalize_landmarks(
-            aligned_landmarks
-        )
-
-        if features is None:
-
-            return None
-
-        return {
-            "features": features
-        }
-
-    except Exception as e:
-
-        print(
-            "Feature extraction error:",
-            str(e)
-        )
-
-        return None
+    label_encoder = None
+
+# ============================
+# SKIN TONE Logic
+# ============================
 
 def hex_to_skin_tone(hex_color: str) -> str:
     hex_color = hex_color.lstrip("#")
@@ -637,12 +402,6 @@ def get_avoid_colors():
         ]
     }
 
-@app.get("/stone")
-async def skintone_info():
-    return {"message": "Get skin tone information"}
-# =========================================================
-# API ENDPOINT
-# =========================================================
 
 @app.post("/stone")
 async def process_image(
@@ -673,30 +432,112 @@ async def process_image(
 
             os.fsync(f.fileno())
 
-
         # =====================================================
         # FACE SHAPE PREDICTION
         # =====================================================
 
-        landmark_result = extract_landmarks(
-            temp_path
+        print(
+            "\n=============================="
         )
 
-        if (
-            face_shape_model is not None
-            and face_shape_scaler is not None
-            and face_shape_pca is not None
-            and landmark_result
-        ):
+        print(
+            "FACE SHAPE ANALYSIS STARTED"
+        )
+
+        print(
+            "=============================="
+        )
+
+        try:
+
+            print(
+                "\nSTEP 1 - Extracting landmarks"
+            )
+
+            landmark_result = extract_landmarks(
+                temp_path
+            )
+
+            if landmark_result is None:
+
+                raise Exception(
+                    "Landmark extraction failed"
+                )
+
+            print(
+                "STEP 2 - Checking model dependencies"
+            )
+
+            if face_shape_model is None:
+
+                raise Exception(
+                    "Face shape model not loaded"
+                )
+
+            if face_shape_scaler is None:
+
+                raise Exception(
+                    "Scaler not loaded"
+                )
+
+            if face_shape_pca is None:
+
+                raise Exception(
+                    "PCA not loaded"
+                )
+
+            if label_encoder is None:
+
+                raise Exception(
+                    "Label encoder not loaded"
+                )
+
+            print(
+                "STEP 3 - Preparing features"
+            )
 
             raw_features = landmark_result[
                 "features"
             ]
 
+            print(
+                f"Raw Features Count: {len(raw_features)}"
+            )
+
+            EXPECTED_FEATURES = 108
+
+            if len(raw_features) != EXPECTED_FEATURES:
+
+                raise Exception(
+                    f"Feature mismatch. "
+                    f"Expected {EXPECTED_FEATURES}, "
+                    f"got {len(raw_features)}"
+                )
+
+            # =====================================
+            # SCALING
+            # =====================================
+
+            print(
+                "STEP 4 - Scaling features"
+            )
+
             features_scaled = (
                 face_shape_scaler.transform(
                     [raw_features]
                 )
+            )
+
+            print(
+                "Scaling completed"
+            )
+
+            # =====================================
+            # PCA
+            # =====================================
+
+            print(
+                "STEP 5 - PCA transformation"
             )
 
             features_pca = (
@@ -705,10 +546,26 @@ async def process_image(
                 )
             )
 
+            print(
+                f"PCA Shape: {features_pca.shape}"
+            )
+
+            # =====================================
+            # PREDICTION
+            # =====================================
+
+            print(
+                "STEP 6 - Predicting face shape"
+            )
+
             probabilities = (
                 face_shape_model.predict_proba(
                     features_pca
                 )[0]
+            )
+
+            print(
+                f"Probabilities: {probabilities}"
             )
 
             sorted_indices = np.argsort(
@@ -727,15 +584,41 @@ async def process_image(
             )
 
             primary_shape = (
-                face_shape_labels[top1_idx]
+                label_encoder
+                .inverse_transform([
+                    top1_idx
+                ])[0]
             )
 
             secondary_shape = (
-                face_shape_labels[top2_idx]
+                label_encoder
+                .inverse_transform([
+                    top2_idx
+                ])[0]
             )
 
-            # Confidence calibration
-            if top1_conf < 0.45:
+            confidence = round(
+                top1_conf,
+                4
+            )
+
+            print(
+                f"Primary Shape: {primary_shape}"
+            )
+
+            print(
+                f"Secondary Shape: {secondary_shape}"
+            )
+
+            print(
+                f"Confidence: {confidence}"
+            )
+
+            # =====================================
+            # FINAL DECISION
+            # =====================================
+
+            if top1_conf < 0.35:
 
                 face_shape = (
                     f"Mixed "
@@ -747,27 +630,27 @@ async def process_image(
 
                 face_shape = primary_shape
 
-            confidence = round(
-                top1_conf,
-                4
+            print(
+                f"Final Face Shape: {face_shape}"
+            )
+
+        except Exception as e:
+
+            print(
+                "\n=============================="
             )
 
             print(
-                f"Primary Shape: "
-                f"{primary_shape}"
+                "FACE SHAPE ERROR"
             )
 
             print(
-                f"Secondary Shape: "
-                f"{secondary_shape}"
+                "=============================="
             )
 
-            print(
-                f"Confidence: "
-                f"{confidence}"
-            )
+            print(str(e))
 
-        else:
+            traceback.print_exc()
 
             face_shape = "Undetected"
 
@@ -777,13 +660,9 @@ async def process_image(
 
             confidence = 0.0
 
-            print(
-                "Face shape prediction failed."
-            )
-
 
         # =====================================================
-        # SKIN TONE LOGIC (UNCHANGED)
+        # SKIN TONE LOGIC 
         # =====================================================
 
         full_result = stone.process(

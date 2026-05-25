@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const PYTHON_API =
-  import.meta.env.VITE_PYTHON_API_URL || 'http://127.0.0.1:8000';
+const PYTHON_API = 'http://127.0.0.1:8000';
 
 export const analyzeImage =
   async (file) => {

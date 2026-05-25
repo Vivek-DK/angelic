@@ -1,630 +1,475 @@
 import os
 import cv2
 import joblib
-import mediapipe as mp
+import traceback
 import numpy as np
+import mediapipe as mp
+
+from sklearn.model_selection import (
+    train_test_split
+)
+
+from sklearn.preprocessing import (
+    StandardScaler,
+    LabelEncoder
+)
+
+from sklearn.decomposition import PCA
+
+from sklearn.ensemble import (
+    RandomForestClassifier
+)
+
+from sklearn.metrics import (
+    classification_report,
+    accuracy_score
+)
 
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import classification_report
-
-from xgboost import XGBClassifier
-
+print("\nTRAINING SCRIPT STARTED\n")
 
 # =========================================================
-# CONFIG
+# BASE DIR
 # =========================================================
 
-DATASET_PATH = "Face_Shape/dataset"
-
-MODEL_SAVE_PATH = "models"
-
-LANDMARK_MODEL_PATH = (
-    "Face_Shape/face_landmarker_v2_with_blendshapes.task"
+BASE_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.abspath(__file__)
+    )
 )
 
-IMAGE_EXTENSIONS = (
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".webp"
+# =========================================================
+# DATASET PATH
+# =========================================================
+
+DATASET_PATH = os.path.join(
+
+    BASE_DIR,
+
+    "Face_Shape",
+
+    "dataset",
+
+    "train"
 )
 
+print("Dataset Path:")
+print(DATASET_PATH)
+
+print(
+    "\nDataset Exists:",
+    os.path.exists(DATASET_PATH)
+)
 
 # =========================================================
-# LABEL MAP
+# MEDIAPIPE MODEL
 # =========================================================
 
-LABEL_MAP = {
-    "Heart": 0,
-    "Oblong": 1,
-    "Oval": 2,
-    "Round": 3,
-    "Square": 4
-}
+MODEL_PATH = os.path.join(
 
-REVERSE_LABEL_MAP = {
-    v: k for k, v in LABEL_MAP.items()
-}
+    BASE_DIR,
 
+    "Face_Shape",
+
+    "face_landmarker_v2_with_blendshapes.task"
+)
+
+print("\nLoading MediaPipe Model...")
+
+base_options = python.BaseOptions(
+    model_asset_path=MODEL_PATH
+)
+
+options = vision.FaceLandmarkerOptions(
+
+    base_options=base_options,
+
+    output_face_blendshapes=False,
+
+    output_facial_transformation_matrixes=True,
+
+    num_faces=1
+)
+
+landmarker = (
+    vision.FaceLandmarker
+    .create_from_options(options)
+)
+
+print("MediaPipe Loaded Successfully.\n")
 
 # =========================================================
-# IMPORTANT LANDMARKS ONLY
+# IMPORTANT FACE LANDMARKS
 # =========================================================
 
 FACE_SHAPE_LANDMARKS = [
 
-    # forehead
     10, 338, 297, 332, 284,
-
-    # right face
     251, 389, 356, 454, 323,
     361, 288, 397, 365, 379,
-
-    # chin
     378, 400, 377, 152,
-
-    # left face
     148, 176, 149, 150, 136,
     172, 58, 132, 93, 234,
     127, 162, 21, 54, 103,
     67, 109
 ]
 
-
-# =========================================================
-# MEDIAPIPE
-# =========================================================
-
-base_options = python.BaseOptions(
-    model_asset_path=LANDMARK_MODEL_PATH
-)
-
-options = vision.FaceLandmarkerOptions(
-    base_options=base_options,
-    output_face_blendshapes=False,
-    output_facial_transformation_matrixes=True,
-    num_faces=1
-)
-
-landmarker = vision.FaceLandmarker.create_from_options(
-    options
-)
-
-
-# =========================================================
-# FACE ALIGNMENT
-# =========================================================
-
-def align_face(image, landmarks):
-
-    left_eye = landmarks[33]
-    right_eye = landmarks[263]
-
-    left = np.array([
-        left_eye.x,
-        left_eye.y
-    ])
-
-    right = np.array([
-        right_eye.x,
-        right_eye.y
-    ])
-
-    h, w = image.shape[:2]
-
-    left *= np.array([w, h])
-    right *= np.array([w, h])
-
-    dx = right[0] - left[0]
-    dy = right[1] - left[1]
-
-    angle = np.degrees(
-        np.arctan2(dy, dx)
-    )
-
-    center = (
-        float((left[0] + right[0]) / 2),
-        float((left[1] + right[1]) / 2)
-    )
-
-    rotation_matrix = cv2.getRotationMatrix2D(
-        center,
-        angle,
-        1.0
-    )
-
-    aligned = cv2.warpAffine(
-        image,
-        rotation_matrix,
-        (w, h),
-        flags=cv2.INTER_CUBIC
-    )
-
-    return aligned
-
-
-# =========================================================
-# RELAXED POSE CHECK
-# =========================================================
-
-def is_valid_pose(landmarks):
-
-    nose_x = landmarks[1].x
-
-    left_x = landmarks[234].x
-    right_x = landmarks[454].x
-
-    denominator = right_x - left_x
-
-    if denominator == 0:
-        return False
-
-    ratio = (
-        (nose_x - left_x) / denominator
-    )
-
-    return 0.20 <= ratio <= 0.80
-
-
-# =========================================================
-# GEOMETRIC FEATURES
-# =========================================================
-
-def extract_geometric_ratios(coords):
-
-    forehead_width = np.linalg.norm(
-        coords[0] - coords[4]
-    )
-
-    cheekbone_width = np.linalg.norm(
-        coords[7] - coords[27]
-    )
-
-    jaw_width = np.linalg.norm(
-        coords[14] - coords[20]
-    )
-
-    face_height = np.linalg.norm(
-        coords[0] - coords[18]
-    )
-
-    chin_width = np.linalg.norm(
-        coords[16] - coords[20]
-    )
-
-    ratios = [
-
-        forehead_width / face_height,
-
-        cheekbone_width / face_height,
-
-        jaw_width / face_height,
-
-        chin_width / face_height,
-
-        forehead_width / jaw_width,
-
-        cheekbone_width / jaw_width,
-
-        face_height / cheekbone_width,
-    ]
-
-    return ratios
-
-
-# =========================================================
-# NORMALIZATION
-# =========================================================
-
-def normalize_landmarks(landmarks):
-
-    coords = []
-
-    for idx in FACE_SHAPE_LANDMARKS:
-
-        lm = landmarks[idx]
-
-        coords.append([
-            lm.x,
-            lm.y,
-            lm.z
-        ])
-
-    coords = np.array(coords)
-
-    # Center
-    coords = coords - coords.mean(axis=0)
-
-    # Scale normalize
-    scale = np.max(
-        np.linalg.norm(coords, axis=1)
-    )
-
-    if scale == 0:
-        return None
-
-    coords = coords / scale
-
-    geometric_features = (
-        extract_geometric_ratios(coords)
-    )
-
-    flattened = coords.flatten()
-
-    final_features = np.concatenate([
-        flattened,
-        geometric_features
-    ])
-
-    return final_features
-
-
-# =========================================================
-# AUGMENTATION
-# =========================================================
-
-def augment_image(image):
-
-    augmented = []
-
-    augmented.append(image)
-
-    augmented.append(
-        cv2.flip(image, 1)
-    )
-
-    # brightness
-    augmented.append(
-        cv2.convertScaleAbs(
-            image,
-            alpha=1.1,
-            beta=15
-        )
-    )
-
-    # darker
-    augmented.append(
-        cv2.convertScaleAbs(
-            image,
-            alpha=0.9,
-            beta=-15
-        )
-    )
-
-    # slight blur
-    augmented.append(
-        cv2.GaussianBlur(
-            image,
-            (3, 3),
-            0
-        )
-    )
-
-    return augmented
-
-
 # =========================================================
 # FEATURE EXTRACTION
 # =========================================================
 
-def extract_features(image_path):
+def extract_landmarks(image_path):
 
-    image = cv2.imread(image_path)
+    try:
 
-    if image is None:
-        return []
+        image = cv2.imread(image_path)
 
-    all_features = []
-
-    augmented_images = augment_image(image)
-
-    for aug_image in augmented_images:
-
-        try:
-
-            rgb = cv2.cvtColor(
-                aug_image,
-                cv2.COLOR_BGR2RGB
-            )
-
-            mp_image = mp.Image(
-                image_format=mp.ImageFormat.SRGB,
-                data=rgb
-            )
-
-            detection = landmarker.detect(
-                mp_image
-            )
-
-            if not detection.face_landmarks:
-                continue
-
-            landmarks = detection.face_landmarks[0]
-
-            if not is_valid_pose(landmarks):
-                continue
-
-            aligned = align_face(
-                aug_image,
-                landmarks
-            )
-
-            rgb_aligned = cv2.cvtColor(
-                aligned,
-                cv2.COLOR_BGR2RGB
-            )
-
-            mp_aligned = mp.Image(
-                image_format=mp.ImageFormat.SRGB,
-                data=rgb_aligned
-            )
-
-            aligned_detection = landmarker.detect(
-                mp_aligned
-            )
-
-            if not aligned_detection.face_landmarks:
-                continue
-
-            aligned_landmarks = (
-                aligned_detection.face_landmarks[0]
-            )
-
-            features = normalize_landmarks(
-                aligned_landmarks
-            )
-
-            if features is not None:
-                all_features.append(features)
-
-        except Exception as e:
+        if image is None:
 
             print(
-                f"Feature extraction error: {e}"
+                f"Failed to read image: {image_path}"
             )
 
-    return all_features
+            return None
 
+        rgb = cv2.cvtColor(
+            image,
+            cv2.COLOR_BGR2RGB
+        )
+
+        mp_image = mp.Image(
+            image_format=mp.ImageFormat.SRGB,
+            data=rgb
+        )
+
+        detection = landmarker.detect(
+            mp_image
+        )
+
+        if not detection.face_landmarks:
+
+            print(
+                f"No face detected: {image_path}"
+            )
+
+            return None
+
+        landmarks = (
+            detection.face_landmarks[0]
+        )
+
+        selected_points = []
+
+        for idx in FACE_SHAPE_LANDMARKS:
+
+            lm = landmarks[idx]
+
+            selected_points.append([
+
+                lm.x,
+                lm.y,
+                lm.z
+            ])
+
+        coords = np.array(
+            selected_points
+        )
+
+        center = np.mean(
+            coords,
+            axis=0
+        )
+
+        coords = coords - center
+
+        scale = np.linalg.norm(
+            coords[18] - coords[0]
+        )
+
+        if scale == 0:
+
+            print(
+                f"Invalid scale: {image_path}"
+            )
+
+            return None
+
+        coords = coords / scale
+
+        return coords.flatten()
+
+    except Exception as e:
+
+        print(
+            f"\nFeature Extraction Error: {image_path}"
+        )
+
+        print(str(e))
+
+        traceback.print_exc()
+
+        return None
 
 # =========================================================
 # LOAD DATASET
 # =========================================================
 
-def load_dataset(folder_path):
+X = []
+y = []
 
-    X = []
-    y = []
+processed = 0
+skipped = 0
 
-    for label_name in os.listdir(folder_path):
+classes = os.listdir(DATASET_PATH)
 
-        label_path = os.path.join(
-            folder_path,
-            label_name
+print("\nClasses Found:")
+print(classes)
+
+for class_name in classes:
+
+    class_path = os.path.join(
+        DATASET_PATH,
+        class_name
+    )
+
+    if not os.path.isdir(class_path):
+        continue
+
+    print(f"\nProcessing Class: {class_name}")
+
+    for img_name in os.listdir(class_path):
+
+        img_path = os.path.join(
+            class_path,
+            img_name
         )
 
-        if not os.path.isdir(label_path):
-            continue
+        print(f"Image: {img_name}")
 
-        if label_name not in LABEL_MAP:
-            continue
+        result = extract_landmarks(
+            img_path
+        )
 
-        label = LABEL_MAP[label_name]
+        if result is None:
 
-        print(f"\nProcessing {label_name}")
+            skipped += 1
 
-        for file_name in os.listdir(label_path):
-
-            if not file_name.lower().endswith(
-                IMAGE_EXTENSIONS
-            ):
-                continue
-
-            image_path = os.path.join(
-                label_path,
-                file_name
+            print(
+                f"Skipped Count: {skipped}"
             )
 
-            features_list = extract_features(
-                image_path
-            )
+            continue
 
-            for features in features_list:
+        X.append(result)
 
-                X.append(features)
-                y.append(label)
+        y.append(class_name)
 
-    return np.array(X), np.array(y)
+        processed += 1
 
-
-# =========================================================
-# LOAD DATA
-# =========================================================
-
-train_folder = os.path.join(
-    DATASET_PATH,
-    "train"
-)
-
-test_folder = os.path.join(
-    DATASET_PATH,
-    "test"
-)
-
-X_train_full, y_train_full = load_dataset(
-    train_folder
-)
-
-X_test, y_test = load_dataset(
-    test_folder
-)
-
+        print(
+            f"Processed Count: {processed}"
+        )
 
 # =========================================================
-# VALIDATION SPLIT
+# DATA CHECK
 # =========================================================
 
-X_train, X_val, y_train, y_val = train_test_split(
-    X_train_full,
-    y_train_full,
-    test_size=0.15,
-    random_state=42,
-    stratify=y_train_full
+if len(X) == 0:
+
+    raise Exception(
+        "\nNo training samples extracted."
+    )
+
+X = np.array(X)
+y = np.array(y)
+
+print("\nTotal Samples:", len(X))
+
+print(
+    "Feature Size:",
+    X.shape[1]
 )
 
+# =========================================================
+# LABEL ENCODER
+# =========================================================
+
+label_encoder = LabelEncoder()
+
+y_encoded = (
+    label_encoder.fit_transform(y)
+)
 
 # =========================================================
-# STANDARDIZE
+# TRAIN TEST SPLIT
+# =========================================================
+
+X_train, X_test, y_train, y_test = (
+
+    train_test_split(
+
+        X,
+
+        y_encoded,
+
+        test_size=0.2,
+
+        random_state=42,
+
+        stratify=y_encoded
+    )
+)
+
+# =========================================================
+# SCALER
 # =========================================================
 
 scaler = StandardScaler()
 
-X_train = scaler.fit_transform(X_train)
+X_train_scaled = (
+    scaler.fit_transform(X_train)
+)
 
-X_val = scaler.transform(X_val)
-
-X_test = scaler.transform(X_test)
-
+X_test_scaled = (
+    scaler.transform(X_test)
+)
 
 # =========================================================
 # PCA
 # =========================================================
 
 pca = PCA(
-    n_components=0.97,
-    random_state=42
+    n_components=0.97
 )
 
-X_train = pca.fit_transform(X_train)
+X_train_pca = (
+    pca.fit_transform(
+        X_train_scaled
+    )
+)
 
-X_val = pca.transform(X_val)
+X_test_pca = (
+    pca.transform(
+        X_test_scaled
+    )
+)
 
-X_test = pca.transform(X_test)
-
-print("\nReduced Features:", X_train.shape[1])
-
+print(
+    "\nReduced Features:",
+    X_train_pca.shape[1]
+)
 
 # =========================================================
-# MODEL
+# RANDOM FOREST
 # =========================================================
 
-model = XGBClassifier(
+print("\nTraining Model...\n")
 
-    n_estimators=2500,
+model = RandomForestClassifier(
 
-    max_depth=10,
+    n_estimators=150,
 
-    learning_rate=0.015,
-
-    subsample=0.85,
-
-    colsample_bytree=0.85,
-
-    min_child_weight=2,
-
-    gamma=0.1,
-
-    objective="multi:softprob",
-
-    num_class=5,
-
-    eval_metric="mlogloss",
+    max_depth=20,
 
     random_state=42,
 
-    tree_method="hist",
-
-    n_jobs=-1
+    class_weight="balanced"
 )
-
-
-# =========================================================
-# TRAIN
-# =========================================================
-
-print("\nTraining Started...\n")
 
 model.fit(
-
-    X_train,
-
-    y_train,
-
-    eval_set=[
-        (X_train, y_train),
-        (X_val, y_val)
-    ],
-
-    verbose=True
+    X_train_pca,
+    y_train
 )
 
+print("Training Completed.\n")
 
 # =========================================================
 # EVALUATION
 # =========================================================
 
-print("\nEvaluating...\n")
-
-predictions = model.predict(X_test)
+y_pred = model.predict(
+    X_test_pca
+)
 
 accuracy = accuracy_score(
     y_test,
-    predictions
+    y_pred
 )
 
-print(f"\nAccuracy: {accuracy:.4f}")
+print(
+    f"\nAccuracy: {accuracy * 100:.2f}%"
+)
+
+print("\nClassification Report:\n")
 
 print(
+
     classification_report(
+
         y_test,
-        predictions,
-        target_names=[
-            "Heart",
-            "Oblong",
-            "Oval",
-            "Round",
-            "Square"
-        ]
+
+        y_pred,
+
+        target_names=
+        label_encoder.classes_
     )
 )
 
+# =========================================================
+# SAVE MODELS
+# =========================================================
 
-# =========================================================
-# SAVE
-# =========================================================
+MODELS_DIR = os.path.join(
+    BASE_DIR,
+    "Face_Shape",
+    "models"
+)
 
 os.makedirs(
-    MODEL_SAVE_PATH,
+    MODELS_DIR,
     exist_ok=True
 )
 
 joblib.dump(
+
     model,
+
     os.path.join(
-        MODEL_SAVE_PATH,
-        "face_shape_xgb.pkl"
+        MODELS_DIR,
+        "face_shape_model.pkl"
     )
 )
 
 joblib.dump(
+
     scaler,
+
     os.path.join(
-        MODEL_SAVE_PATH,
+        MODELS_DIR,
         "scaler.pkl"
     )
 )
 
 joblib.dump(
+
     pca,
+
     os.path.join(
-        MODEL_SAVE_PATH,
+        MODELS_DIR,
         "pca.pkl"
     )
 )
 
-print("\nModel Saved Successfully")
+joblib.dump(
+
+    label_encoder,
+
+    os.path.join(
+        MODELS_DIR,
+        "label_encoder.pkl"
+    )
+)
+
+print("\nModels Saved Successfully.")
