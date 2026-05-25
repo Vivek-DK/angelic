@@ -1,30 +1,89 @@
 import React from "react";
 import "./Contact.css";
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
-import vivek from "../../assets/contact.jpg";
+import contact_image from "../../assets/contact.jpg";
 
 const Contact = () => {
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+
     e.preventDefault();
 
-    const name = e.target.name.value.trim();
-    const email = e.target.email.value.trim();
-    const phone = e.target.phone.value.trim();
-    const message = e.target.message.value.trim();
+    const name =
+      e.target.name.value.trim();
 
-    const subject = encodeURIComponent(`Message from ${name}`);
-    const body = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nMessage:\n${message}`
-    );
+    const email =
+      e.target.email.value.trim();
 
-    window.location.href = `mailto:vivek.dkrishnamurthy@gmail.com?subject=${subject}&body=${body}`;
+    const phone =
+      e.target.phone.value.trim();
+
+    const message =
+      e.target.message.value.trim();
+
+    const Node_Url = import.meta.env.VITE_NODE_API_URL
+
+    try {
+
+      const response = await fetch(
+
+        `${Node_Url}/api/contact`,
+
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+
+            name,
+
+            email,
+
+            phone,
+
+            message
+          })
+        }
+      );
+
+      const data =
+        await response.json();
+
+      if (data.success) {
+
+        alert(
+          "Message sent successfully!"
+        );
+
+        e.target.reset();
+
+      } else {
+
+        alert(
+          data.message
+        );
+      }
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert(
+        "Failed to send message"
+      );
+    }
   };
 
   return (
     <section className="contact-section">
       <div className="contact-wrapper">
         <div className="contact-left">
-          <img src={vivek} alt="Contact Support" />
+          <img src={contact_image} alt="Contact Support" />
         </div>
 
         <div className="contact-right">

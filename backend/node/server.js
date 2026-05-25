@@ -11,6 +11,7 @@ const {
 const authRoutes = require("./routes/auth");
 const historyRoutes = require("./routes/history");
 const uploadRoutes = require("./routes/upload");
+const contactRoutes = require("./routes/contactRoutes");
 
 const compression =
   require("compression");
@@ -87,6 +88,11 @@ app.use(
 app.use(
   "/api/upload",
   uploadRoutes
+);
+
+app.use(
+  "/api/contact",
+  contactRoutes
 );
 
 app.use(errorHandler);

@@ -344,26 +344,7 @@ const Analysis = () => {
           optimizedImage
         );
 
-      console.log(
-
-        "Original:",
-
-        (imageFile.size / 1024 / 1024)
-          .toFixed(2),
-
-        "MB"
-      );
-
-      console.log(
-
-        "Optimized:",
-
-        (optimizedImage.size / 1024 / 1024)
-          .toFixed(2),
-
-        "MB"
-      );
-
+  
       // ======================================
       // UPDATE TEXT
       // ======================================
@@ -421,10 +402,6 @@ const Analysis = () => {
       // ======================================
       // CONVERT IMAGE
       // ======================================
-
-      console.log(
-        optimizedImage
-      );
 
       const base64Img =
         await fileToBase64(

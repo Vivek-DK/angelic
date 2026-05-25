@@ -18,9 +18,6 @@ from Face_Shape.face_utils import (
     extract_landmarks
 )
 
-print("MAIN STARTED")
-print("Current Directory:", os.getcwd())
-
 load_dotenv()
 
 app = FastAPI()
@@ -40,7 +37,6 @@ app.include_router(chatbot_router, prefix="/api")
 
 
 print("FACE SHAPE MODEL INITIALIZATION")
-print("==============================")
 
 try:
 
@@ -54,7 +50,6 @@ try:
         "models"
     )
 
-    print("\nModels Directory:")
     print(MODELS_DIR)
 
     # =====================================
@@ -450,10 +445,6 @@ async def process_image(
 
         try:
 
-            print(
-                "\nSTEP 1 - Extracting landmarks"
-            )
-
             landmark_result = extract_landmarks(
                 temp_path
             )
@@ -464,9 +455,6 @@ async def process_image(
                     "Landmark extraction failed"
                 )
 
-            print(
-                "STEP 2 - Checking model dependencies"
-            )
 
             if face_shape_model is None:
 
@@ -492,18 +480,11 @@ async def process_image(
                     "Label encoder not loaded"
                 )
 
-            print(
-                "STEP 3 - Preparing features"
-            )
-
             raw_features = landmark_result[
                 "features"
             ]
 
-            print(
-                f"Raw Features Count: {len(raw_features)}"
-            )
-
+        
             EXPECTED_FEATURES = 108
 
             if len(raw_features) != EXPECTED_FEATURES:
@@ -518,27 +499,16 @@ async def process_image(
             # SCALING
             # =====================================
 
-            print(
-                "STEP 4 - Scaling features"
-            )
-
             features_scaled = (
                 face_shape_scaler.transform(
                     [raw_features]
                 )
             )
 
-            print(
-                "Scaling completed"
-            )
 
             # =====================================
             # PCA
             # =====================================
-
-            print(
-                "STEP 5 - PCA transformation"
-            )
 
             features_pca = (
                 face_shape_pca.transform(
@@ -546,26 +516,14 @@ async def process_image(
                 )
             )
 
-            print(
-                f"PCA Shape: {features_pca.shape}"
-            )
-
             # =====================================
             # PREDICTION
             # =====================================
-
-            print(
-                "STEP 6 - Predicting face shape"
-            )
 
             probabilities = (
                 face_shape_model.predict_proba(
                     features_pca
                 )[0]
-            )
-
-            print(
-                f"Probabilities: {probabilities}"
             )
 
             sorted_indices = np.argsort(
@@ -602,18 +560,6 @@ async def process_image(
                 4
             )
 
-            print(
-                f"Primary Shape: {primary_shape}"
-            )
-
-            print(
-                f"Secondary Shape: {secondary_shape}"
-            )
-
-            print(
-                f"Confidence: {confidence}"
-            )
-
             # =====================================
             # FINAL DECISION
             # =====================================
@@ -629,10 +575,6 @@ async def process_image(
             else:
 
                 face_shape = primary_shape
-
-            print(
-                f"Final Face Shape: {face_shape}"
-            )
 
         except Exception as e:
 
