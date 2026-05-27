@@ -1,21 +1,82 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-const auth = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+const User = require("../models/User");
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Unauthorized: No token provided" });
-  }
-
-  const token = authHeader.split(" ")[1];
+const auth = async (
+  req,
+  res,
+  next
+) => {
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.id; 
+
+    const authHeader =
+      req.headers.authorization;
+
+    if (
+
+      !authHeader ||
+
+      !authHeader.startsWith(
+        "Bearer "
+      )
+
+    ) {
+
+      return res.status(401).json({
+
+        success: false,
+
+        message:
+          "Unauthorized"
+      });
+    }
+
+    const token =
+      authHeader.split(" ")[1];
+
+    const decoded =
+      jwt.verify(
+
+        token,
+
+        process.env.JWT_SECRET
+      );
+
+    const user =
+      await User.findById(
+        decoded.id
+      ).select("-password");
+
+    if (!user) {
+
+      return res.status(404).json({
+
+        success: false,
+
+        message:
+          "User not found"
+      });
+    }
+
+    req.user = user;
+
     next();
-  } catch (err) {
-    console.error("JWT verification failed:", err);
-    res.status(403).json({ message: "Forbidden: Invalid or expired token" });
+
+  } catch (error) {
+
+    console.log(
+      "AUTH ERROR:",
+      error
+    );
+
+    return res.status(403).json({
+
+      success: false,
+
+      message:
+        "Invalid token"
+    });
   }
 };
 
