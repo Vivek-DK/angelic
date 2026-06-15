@@ -72,7 +72,7 @@ router.post(
         await History.create({
 
           userId:
-            req.userId,
+            req.user._id,
 
           analysisName,
 
@@ -165,8 +165,8 @@ router.get(
 
       const query = {
 
-        userId:
-          req.userId
+        userId: 
+          req.user._id
       };
 
 
@@ -259,7 +259,7 @@ router.get(
             req.params.id,
 
           userId:
-            req.userId
+            req.user._id
         });
 
       if (!history) {
@@ -320,7 +320,7 @@ router.delete(
             req.params.id,
 
           userId:
-            req.userId
+            req.user._id
         });
 
 

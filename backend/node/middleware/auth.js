@@ -69,7 +69,7 @@ const auth = async (
       "AUTH ERROR:",
       error
     );
-
+    
     return res.status(403).json({
 
       success: false,
