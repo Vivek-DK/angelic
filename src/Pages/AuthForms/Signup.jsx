@@ -62,7 +62,7 @@ const Signup = () => {
     });
 
   const API_BASE =
-    import.meta.env.VITE_NODE_URL || "http://localhost:5000";
+    import.meta.env.VITE_NODE_URL;
 
 
   const handleChange =
